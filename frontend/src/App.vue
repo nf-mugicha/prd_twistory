@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app id="app">
     <v-app-bar app>
       <v-toolbar-title class="headline text-uppercase">
         <span>Vuetify</span>
@@ -14,21 +14,25 @@
         <span class="mr-2">Latest Release</span>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
+      <Login />
     </v-app-bar>
-
     <v-content>
-      <HelloWorld/>
+      <router-view></router-view>
     </v-content>
   </v-app>
 </template>
 
 <script>
 import HelloWorld from './components/HelloWorld'
+import Navbar from './components/common/Navbar'
+import Login from './components/common/Login'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    HelloWorld,
+    Navbar,
+    Login
   },
   data: () => ({
     //

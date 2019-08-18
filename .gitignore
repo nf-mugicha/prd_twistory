@@ -102,3 +102,11 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# settings
+backend/app/settings/twitter_api.py
+.history
+all_tweets.csv
+frontend/src/plugins/firebase.js
+.vscode
+frontend/package*
