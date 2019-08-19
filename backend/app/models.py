@@ -269,19 +269,9 @@ def get_user_tweets_more(account, max_id, all_tweets):
 
 if __name__ == '__main__':
     print('start')
-    account = "hinodeeeeee"
+    account = ""
     filename = "tweet_data_{}.csv".format(account)
     filename_2 = "tweet_data_{}_2.csv".format(account)
-    # get_tweet('nobody_tsurai')
+    # get_tweet('')
     all_tweets, max_id = get_user_timeline(account)
-    # これが3200ツイート目
-    # max_id = 1140264711226662911
-    # max_id = 1148956601585291263
-    # これが最初のmax_id
-    # max_id = 1159413593881939967
-    # get_user_tweets("nobody_tsurai", max_id)
-    # all_tweets = []
-    # max_id = 1139674341669400575
-    # all_tweets = []
-    # max_id = 486369808967929858
     get_user_tweets_more(account, max_id, all_tweets)
