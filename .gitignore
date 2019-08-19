@@ -107,7 +107,9 @@ venv.bak/
 backend/app/settings/twitter_api.py
 .history
 all_tweets*
+tweet_data*
 frontend/src/plugins/firebase.js
 .vscode
 frontend/package*
 frontend/
+backend/app/settings/twitter_connect.py
