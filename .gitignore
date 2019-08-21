@@ -108,8 +108,12 @@ backend/app/settings/twitter_api.py
 .history
 all_tweets*
 tweet_data*
+user_timeline*
+all_tweets*
+alltweets_raw_data_fujiwaratakuro.json
 frontend/src/plugins/firebase.js
 .vscode
 frontend/package*
 frontend/
 backend/app/settings/twitter_connect.py
+get_tweets_assets
