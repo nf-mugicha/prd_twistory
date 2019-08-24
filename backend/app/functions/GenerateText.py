@@ -38,7 +38,7 @@ class GenerateText(object):
 
         text_3grams_list = []
         # tsvファイルオープン
-        with open('triplet_freqs.tsv', newline='') as f:
+        with open('triplet_freqs_hinodeeeeee_3200.tsv', newline='') as f:
             reader = csv.DictReader(f, delimiter='\t')
             for row in reader:
                 text_3grams_list.append(row)

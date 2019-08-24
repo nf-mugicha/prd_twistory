@@ -38,7 +38,7 @@ class PrepareChain(object):
         self.tagger = MeCab.Tagger(
             '-Ochasen /usr/local/lib/mecab/dic/mecab-ipadic-neologd')
 
-    def make_triplet_freqs(self, id):
+    def make_triplet_freqs(self):
         """
         形態素解析から3つ組の出現回数まで
         @return 3つ組とその出現回数の辞書 key: 3つ組（タプル） val: 出現回数
@@ -152,7 +152,7 @@ class PrepareChain(object):
         con.commit()
         con.close()
 
-    def save_tsv(self, id, triplet_freqs, file_triplet_freqs, init=False):
+    def save_tsv(self, triplet_freqs, file_triplet_freqs, init=False):
         """
         3つ組毎に出現回数をtsvファイルに保存
         @param triplet_freqs 3つ組とその出現回数の辞書 key: 3つ組（タプル） val: 出現回数
@@ -162,7 +162,7 @@ class PrepareChain(object):
             writecsv = csv.DictWriter(
                 f,
                 [
-                    'id', 'prefix1', 'prefix2',
+                    'prefix1', 'prefix2',
                     'suffix', 'freq'
                 ],
                 delimiter='\t'
@@ -174,7 +174,6 @@ class PrepareChain(object):
             tweet_excerpt = {}
             for (triplet, freq) in list(triplet_freqs.items()):
                 # 連想配列に格納
-                tweet_excerpt["id"] = id
                 tweet_excerpt["prefix1"] = triplet[0]
                 tweet_excerpt["prefix2"] = triplet[1]
                 tweet_excerpt["suffix"] = triplet[2]
@@ -307,15 +306,15 @@ if __name__ == '__main__':
 
     tweet_list = []
     tweet_text_list = []
-    with open('/Users/user/products/prd_twistory/get_tweets_assets/hinodeeeeee/tweets_all.tsv', newline='') as f:
+    with open('/Users/user/products/prd_twistory/get_tweets_assets/nobody_tsurai/tweets_3200_nobody_tsurai.tsv', newline='') as f:
         reader = csv.DictReader(f, delimiter='\t')
         for row in reader:
             tweet_text_list.append(row['tweet_text'])
     text = "".join(tweet_text_list[:-1])
     chain = PrepareChain(text)
-    triplet_freqs = chain.make_triplet_freqs(id)
+    triplet_freqs = chain.make_triplet_freqs()
     # print(triplet_freqs)
     # print(type(triplet_freqs))
     # chain.save(triplet_freqs, True)
-    chain.save_tsv(id=id, triplet_freqs=triplet_freqs,
-                   file_triplet_freqs='triplet_freqs.tsv', init=True)
+    chain.save_tsv(triplet_freqs=triplet_freqs,
+                   file_triplet_freqs='triplet_freqs_nobody_tsurai_3200.tsv', init=True)
