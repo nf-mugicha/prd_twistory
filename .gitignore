@@ -117,3 +117,5 @@ frontend/package*
 frontend/
 backend/app/settings/twitter_connect.py
 get_tweets_assets
+chain.db
+triplet_freqs.tsv
