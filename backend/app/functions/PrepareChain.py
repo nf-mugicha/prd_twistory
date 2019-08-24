@@ -45,12 +45,8 @@ class PrepareChain(object):
         """
         # 長い文章をセンテンス毎に分割
         sentences = self._divide(self.text)
-        print("長い文章をセンテンスごとに分割")
-        print(sentences)
         # 3つ組の出現回数
         triplet_freqs = defaultdict(int)
-        print("3つ組の出現回数　triplet_freqs")
-        print(triplet_freqs)
         triplet_freqs_tweet = {}
         # センテンス毎に3つ組にする
         for sentence in sentences:
@@ -58,15 +54,10 @@ class PrepareChain(object):
             morphemes = self._morphological_analysis(sentence)
             # 3つ組をつくる
             triplets = self._make_triplet(morphemes)
-            # print('三つ組を作る　triplets')
-            # print(triplets)
             # 出現回数を加算
             for (triplet, n) in list(triplets.items()):
                 # 三つ組のタプルがkey, 出現回数がvalue
                 triplet_freqs[triplet] += n
-        print('出現回数を加算　triplet_freqs')
-        # triplet_freqs_tweet[id] = triplet_freqs
-        # print(triplet_freqs_tweet)
         return triplet_freqs
 
     def _divide(self, text):
@@ -314,10 +305,17 @@ if __name__ == '__main__':
 　私はこの想像を熱心に追求した。「そうしたらあの気詰まりな丸善も粉葉みじんだろう」
 　そして私は活動写真の看板画が奇体な趣きで街を彩っている京極を下って行った。"""
 
+    tweet_list = []
+    tweet_text_list = []
+    with open('/Users/user/products/prd_twistory/get_tweets_assets/hinodeeeeee/tweets_all.tsv', newline='') as f:
+        reader = csv.DictReader(f, delimiter='\t')
+        for row in reader:
+            tweet_text_list.append(row['tweet_text'])
+    text = "".join(tweet_text_list[:-1])
     chain = PrepareChain(text)
     triplet_freqs = chain.make_triplet_freqs(id)
-    print(triplet_freqs)
-    print(type(triplet_freqs))
+    # print(triplet_freqs)
+    # print(type(triplet_freqs))
     # chain.save(triplet_freqs, True)
     chain.save_tsv(id=id, triplet_freqs=triplet_freqs,
                    file_triplet_freqs='triplet_freqs.tsv', init=True)

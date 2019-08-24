@@ -40,7 +40,7 @@ def get_tweet(account):
     # 既に3200件のデータを取り終えていたらやらない
     if not os.path.exists(user_timeline_3200_raw):
         # 3200件のツイートデータ取得・保存
-        all_tweets, latest_id = get_3200_user_timeline(
+        all_tweets = get_3200_user_timeline(
             account, user_timeline_3200_raw)
     # 保存したpklファイルを開く
     with open(user_timeline_3200_raw, 'rb') as f:
@@ -64,5 +64,5 @@ def get_tweet(account):
 
 if __name__ == '__main__':
     print('start tweet scraping')
-    account = "Pxilicon"
+    account = ""
     get_tweet(account)

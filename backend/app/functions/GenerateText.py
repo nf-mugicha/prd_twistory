@@ -23,39 +23,13 @@ class GenerateText(object):
         """
         self.n = n
 
-    def generate(self):
-        """
-        実際に生成する
-        @return 生成された文章
-        """
-        # DBが存在しないときは例外をあげる
-        if not os.path.exists(PrepareChain.DB_PATH):
-            raise IOError("DBファイルが存在しません")
-
-        # DBオープン
-        con = sqlite3.connect(PrepareChain.DB_PATH)
-        con.row_factory = sqlite3.Row
-
-        # 最終的にできる文章
-        generated_text = ""
-
-        # 指定の数だけ作成する
-        for i in range(self.n):
-            text = self._generate_sentence(con)
-            generated_text += text
-
-        # DBクローズ
-        con.close()
-
-        return generated_text
-
     def generate_from_tsv(self):
         """
         実際に生成する
         @return 生成された文章
         """
         # DBが存在しないときは例外をあげる
-        if not os.path.exists('triplet_freqs.tsv'):
+        if not os.path.exists('triplet_freqs_1.tsv'):
             raise IOError("tsvファイルが存在しません")
 
         # DBオープン
@@ -74,7 +48,7 @@ class GenerateText(object):
 
         # 指定の数だけ作成する
         for i in range(self.n):
-            text = self._generate_sentence(text_3grams_list)
+            text = self._generate_sentence(text_3grams_list) + "\n\n"
             generated_text += text
 
         # DBクローズ
@@ -122,6 +96,8 @@ class GenerateText(object):
 
         # 文章を紡いでいく
         while morphemes[-1] != PrepareChain.END:
+            if len(''.join(morphemes)) > 30:
+                break
             prefix1 = morphemes[-2]
             prefix2 = morphemes[-1]
             triplet = self._get_triplet(text_3grams_list, prefix1, prefix2)
@@ -129,31 +105,6 @@ class GenerateText(object):
 
         # 連結
         result = "".join(morphemes[:-1])
-
-        return result
-
-    def _get_chain_from_DB(self, text_3grams_list, prefixes):
-        """
-        チェーンの情報をDBから取得する
-        @param con DBコネクション
-        @param text_3grams_list 3gramsの辞書型配列が格納されたリスト
-        @param prefixes チェーンを取得するprefixの条件 tupleかlist
-        @return チェーンの情報の配列
-        """
-        # ベースとなるSQL
-        sql = "select prefix1, prefix2, suffix, freq from chain_freqs where prefix1 = ?"
-
-        # prefixが2つなら条件に加える
-        if len(prefixes) == 2:
-            sql += " and prefix2 = ?"
-
-        # 結果
-        result = []
-
-        # DBから取得
-        cursor = con.execute(sql, prefixes)
-        for row in cursor:
-            result.append(dict(row))
 
         return result
 
