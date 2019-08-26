@@ -9,7 +9,7 @@ import pickle
 
 
 def get_3200_user_timeline(account, user_timeline_3200_raw, logger):
-    logger.debug("start latests' 200 tweets scraping")
+    logger.info("start latests' 200 tweets scraping")
     # 3200ツイートを入れる空のリストを用意
     all_tweets = []
     # 直近200ツイートを取得
@@ -19,8 +19,9 @@ def get_3200_user_timeline(account, user_timeline_3200_raw, logger):
             count=200
         )
     except:
-        logger.error("{} may be private account, can not get user timeline")
-        logger.error(latest_tweets)
+        logger.error(
+            "{} may be private account or does not exists, can not get user timeline".format(account))
+        raise
     # 最新のツイートid取得
     latest_id = latest_tweets[0].id
     logger.info("now's latest id: {}".format(str(latest_tweets[0].id)))
@@ -38,10 +39,11 @@ def get_3200_user_timeline(account, user_timeline_3200_raw, logger):
         )
         all_tweets.extend(latest_tweets)
         c = c+1
+    max_id = all_tweets[-1].id-1
     # 取得した3200ツイート生データをファイル書き出ししておく
     with open(user_timeline_3200_raw,
               "wb") as f:
         pickle.dump(all_tweets, f)
         logger.info("save raw data of 3200 tweets: {}".format(
             user_timeline_3200_raw))
-    return all_tweets, latest_id
+    return all_tweets, latest_id, max_id

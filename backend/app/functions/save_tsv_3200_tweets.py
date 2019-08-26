@@ -27,6 +27,7 @@ def save_tsv_3200_tweets(all_tweets, filename_3200, logger):
         )
         writecsv.writeheader()
         tweet_excerpt = {}
+        tweet_id = []
         for tweet in all_tweets:
             # RTは除外
             if tweet.text.startswith('RT'):
@@ -47,8 +48,10 @@ def save_tsv_3200_tweets(all_tweets, filename_3200, logger):
                     tweet_excerpt["image_{}".format(i)] = m.media_url_https
             # ファイル出力
             writecsv.writerow(tweet_excerpt)
+            tweet_id.append(int(tweet.id))
             # 辞書を初期化
             tweet_excerpt = {}
-    max_id = all_tweets[-1].id-1
+    max_id = min(tweet_id)
+    latest_id = max(tweet_id)
     # 3200ツイート分のリストと、最後のmax_idを返す
-    return all_tweets, max_id
+    return all_tweets, max_id, latest_id
