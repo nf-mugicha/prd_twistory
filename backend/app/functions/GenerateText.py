@@ -8,7 +8,7 @@ import os.path
 import sqlite3
 import random
 import csv
-from PrepareChain import PrepareChain
+from .PrepareChain import PrepareChain
 
 
 class GenerateText(object):
@@ -16,30 +16,31 @@ class GenerateText(object):
     文章生成用クラス
     """
 
-    def __init__(self, n=5):
+    def __init__(self, logger):
         """
         初期化メソッド
         @param n いくつの文章を生成するか
+        @param logger ログオブジェクト
         """
-        self.n = n
+        # self.n = n
+        self.logger = logger
 
-    def generate_from_tsv(self):
+    def generate_from_tsv(self, triplet_freqs_tsv):
         """
         実際に生成する
         @return 生成された文章
         """
         # DBが存在しないときは例外をあげる
-        if not os.path.exists('triplet_freqs_1.tsv'):
+        if not os.path.exists(triplet_freqs_tsv):
+            self.logger.error(
+                "tsv file does not exist: {]".format(triplet_freqs_tsv))
             raise IOError("tsvファイルが存在しません")
-
-        # DBオープン
-        # con = sqlite3.connect(PrepareChain.DB_PATH)
-        # con.row_factory = sqlite3.Row
 
         text_3grams_list = []
         # tsvファイルオープン
-        with open('triplet_freqs_hinodeeeeee_3200.tsv', newline='') as f:
+        with open(triplet_freqs_tsv, newline='') as f:
             reader = csv.DictReader(f, delimiter='\t')
+            self.logger.info("open file: {}".format(triplet_freqs_tsv))
             for row in reader:
                 text_3grams_list.append(row)
 
@@ -47,18 +48,24 @@ class GenerateText(object):
         generated_text = ""
 
         # 指定の数だけ作成する
-        for i in range(self.n):
-            text = self._generate_sentence(text_3grams_list) + "\n\n"
-            generated_text += text
-
-        # DBクローズ
-        # con.close()
+        while True:
+            text = self._generate_sentence(text_3grams_list)
+            # 生成したテキストが30文字以上だったらやり直し
+            if len(text) < 10 or len(text) > 45:
+                self.logger.info("not output for 10 < text < 45")
+                self.logger.info("text length: {}".format(len(text)))
+                self.logger.info(text)
+                continue
+            else:
+                generated_text += text
+                self.logger.info("text length:{}".format(len(generated_text)))
+                break
 
         return generated_text
 
     def _get_chain_from_tsv(self, text_3grams_list, prefixes):
         """
-        チェーンの情報をDBから取得する
+        チェーンの情報をtsvファイルから取得する
         @param text_3grams_list 3gramsの辞書型配列が格納されたリスト
         @param prefixes チェーンを取得するprefixの条件 tupleかlist
         @return チェーンの情報の配列
@@ -66,16 +73,27 @@ class GenerateText(object):
 
         # 結果
         result = []
-
+        self.logger.debug("prefixes: {}".format(prefixes))
         # prefixが含まれるもののみを配列に格納する
         for row in text_3grams_list:
             # prefixが２の場合はどちらも一致するものを配列に格納する
             if len(prefixes) == 2:
                 if (prefixes[0] in row['prefix1']) and (prefixes[1] in row['prefix2']):
+                    self.logger.debug("make sentence: {}".format(row))
+                    self.logger.debug(
+                        "prefix[0] in row['prefix1'] and (prefixes[1] in row['prefix2']) is {}".format(
+                            (prefixes[0] in row['prefix1']) and (
+                                prefixes[1] in row['prefix2'])
+                        )
+                    )
                     result.append(row)
             elif prefixes[0] in row['prefix1']:
+                self.logger.debug(
+                    "it may be BEGIN SENTENCE: {}".format(row))
                 result.append(row)
             else:
+                self.logger.debug(
+                    "it may not use to make sentence: {}".format(row))
                 continue
 
         return result
@@ -91,18 +109,17 @@ class GenerateText(object):
 
         # はじまりを取得
         first_triplet = self._get_first_triplet(text_3grams_list)
+        self.logger.debug("first triplet {}".format(first_triplet))
         morphemes.append(first_triplet['prefix2'])
         morphemes.append(first_triplet['suffix'])
 
         # 文章を紡いでいく
         while morphemes[-1] != PrepareChain.END:
-            if len(''.join(morphemes)) > 30:
-                break
             prefix1 = morphemes[-2]
             prefix2 = morphemes[-1]
             triplet = self._get_triplet(text_3grams_list, prefix1, prefix2)
             morphemes.append(triplet['suffix'])
-
+        self.logger.debug(morphemes)
         # 連結
         result = "".join(morphemes[:-1])
 

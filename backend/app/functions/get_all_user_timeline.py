@@ -27,7 +27,9 @@ twitterAPI仕様
 
 
 def get_all_user_timeline(
-        account, max_id, user_timeline_all_raw, filename_all):
+        account, max_id, user_timeline_all_raw, filename_all, logger):
+    logger.debug("start scraping more {}s' timeline".format(account))
+    logger.debug("scraping from {}".format(max_id))
     consumer_key = twitter_api.CONSUMER_KEY
     consumer_secret = twitter_api.CONSUMER_SECRET_KEY
     access_token = twitter_api.ACCESS_TOKEN
@@ -37,7 +39,7 @@ def get_all_user_timeline(
     # Creating key
     key = "&".join([consumer_secret, access_token_secret])
     key = key.encode("utf-8")
-    print("[+] Key:\n\n", key)
+    logger.info("Key: ".format(key))
 
     # For authentication
     timestamp = time.time()
@@ -70,14 +72,10 @@ def get_all_user_timeline(
         # 取得したツイートを格納する
         all_tweets = []
         while True:
-            print(a)
-            # print(type(max_id))
-            # print(max_id)
+            logger.info("connect twitterAPI counter: {}".format(a))
             req_url = twitter_api.TWITTER_API_URL
             params_a = {
                 "q": "from:{0}\tmax_id:{1}".format(account, max_id),
-                # "q": "from:"+str(account),
-                # "q": "from:{}\suntil:2019-08-19".format(account),
                 "modules": "status",
                 "count": 50
             }
@@ -90,7 +88,7 @@ def get_all_user_timeline(
             req_params = urlencode(req_params)
             # By default, quote() do not quote "/".
             req_params = quote(req_params, safe="")
-            # print("[+] req_params:\n\n", req_params)
+            logger.info("req_params: {}".format(req_params))
 
             enc_req_method = quote(req_method, safe="")
             enc_req_url = quote(req_url, safe="")
@@ -102,40 +100,44 @@ def get_all_user_timeline(
             _hash = digester.digest()
 
             signature = base64.b64encode(_hash)
-            # print("[+] signature:\n\n", signature)
+            logger.info("signature: {}".format(signature))
             # params_c["oauth_signature"] = signature
             params_c["oauth_signature"] = signature
 
             # give me idea to rewrite dict into "key=value, key=value,..."
             oauth_params = urlencode(params_c)
             oauth_params = oauth_params.replace("&", ",")
-            # print("[+] oauth_params:\n\n", oauth_params)
+            logger.info("oauth_params: {}".format(oauth_params))
 
             headers = {
                 "Authorization": "OAuth " + oauth_params
             }
 
             req_url += '?' + urlencode(params_a)
-            # print(req_url)
+            logger.info("request URL: {}".format(req_url))
             # print('\n')
 
             res = requests.get(req_url, headers=headers)
             datas = res.json()  # API response
             if len(datas) < 2:
-                print('error response')
-                print(datas)
+                logger.info('error response')
+                logger.info(datas)
                 # 取得した生データをファイル書き出ししておく
                 with open(user_timeline_all_raw,
                           "wb") as f:
                     pickle.dump(all_tweets, f)
+                    logger.info("save file until this time: {}".format(
+                        user_timeline_all_raw))
                 break
             elif len(datas["modules"]) == 0:
-                print(datas)
-                print('finish tweet scraping')
+                logger.info('finish tweet scraping')
+                logger.info(datas)
                 # 取得した生データをファイル書き出ししておく
                 with open(user_timeline_all_raw,
                           "wb") as f:
                     pickle.dump(all_tweets, f)
+                    logger.info("save file: {}".format(
+                        user_timeline_all_raw))
                 break
             else:
                 # データを格納する
@@ -146,7 +148,7 @@ def get_all_user_timeline(
                     if data[0]["text"].startswith('RT'):
                         continue
                     # ツイートテキスト前処理
-                    tweet_text = clean_tweet_text(data[0]["text"])
+                    tweet_text = clean_tweet_text(data[0]["text"], logger)
                     # 連想配列に格納
                     tweet_excerpt["id"] = data[0]["id"]
                     tweet_excerpt["tweet_text"] = tweet_text
@@ -163,9 +165,10 @@ def get_all_user_timeline(
                                     i)] = m["media_url_https"]
                     # ファイル出力
                     writecsv.writerow(tweet_excerpt)
+                    logger.info("tweet: {}".format(tweet_excerpt))
                     # 辞書を初期化
                     tweet_excerpt = {}
                 # print(data[0]["id"])
                 max_id = data[0]["id"]-1
                 a = a+1
-                print('oldest_max_id: {}'.format(max_id))
+                logger.debug('oldest_max_id: {}'.format(max_id))

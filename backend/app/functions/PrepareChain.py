@@ -22,10 +22,7 @@ class PrepareChain(object):
     BEGIN = "__BEGIN_SENTENCE__"
     END = "__END_SENTENCE__"
 
-    DB_PATH = "chain.db"
-    DB_SCHEMA_PATH = "schema.sql"
-
-    def __init__(self, text):
+    def __init__(self, text, logger):
         """
         初期化メソッド
         @param text チェーンを生成するための文章
@@ -33,7 +30,8 @@ class PrepareChain(object):
         if isinstance(text, str):
             # text = text.decode("utf-8")
             self.text = text
-
+        # ロガー
+        self.logger = logger
         # 形態素解析用タガー
         self.tagger = MeCab.Tagger(
             '-Ochasen /usr/local/lib/mecab/dic/mecab-ipadic-neologd')
@@ -43,8 +41,10 @@ class PrepareChain(object):
         形態素解析から3つ組の出現回数まで
         @return 3つ組とその出現回数の辞書 key: 3つ組（タプル） val: 出現回数
         """
+        self.logger.debug("start make_triple_freqs")
         # 長い文章をセンテンス毎に分割
         sentences = self._divide(self.text)
+        self.logger.debug("devide sentences: {}".format(sentences))
         # 3つ組の出現回数
         triplet_freqs = defaultdict(int)
         triplet_freqs_tweet = {}
@@ -67,10 +67,12 @@ class PrepareChain(object):
         @return 一文ずつの配列
         """
         # 改行文字以外の分割文字（正規表現表記）
-        delimiter = "。|．|\."
+        # delimiter = "。|．|\."
+        delimiter = "。"
 
         # 全ての分割文字を改行文字に置換（splitしたときに「。」などの情報を無くさないため）
-        text = re.sub(r"({0})".format(delimiter), r"\1\n", text)
+        # text = re.sub(r"({0})".format(delimiter), r"\1\n", text)
+        text = re.sub(r"({0})".format(delimiter), r"\n", text)
 
         # 改行文字で分割
         sentences = text.splitlines()
@@ -86,15 +88,16 @@ class PrepareChain(object):
         @param sentence 一文
         @return 形態素で分割された配列
         """
+        self.logger.debug("morphological analysis")
+        self.logger.debug(sentence)
         morphemes = []
-        # sentence = sentence.encode("utf-8")
         node = self.tagger.parseToNode(sentence)
         while node:
             if node.posid != 0:
-                # morpheme = node.surface.decode("utf-8")
                 morpheme = node.surface
                 morphemes.append(morpheme)
             node = node.next
+        self.logger.debug(morphemes)
         return morphemes
 
     def _make_triplet(self, morphemes):
@@ -103,8 +106,12 @@ class PrepareChain(object):
         @param morphemes 形態素配列
         @return 3つ組とその出現回数の辞書 key: 3つ組（タプル） val: 出現回数
         """
+        self.logger.debug('make triplet')
         # 3つ組をつくれない場合は終える
         if len(morphemes) < 3:
+            self.logger.info(
+                'not enough number of grams: {}'.format(morphemes))
+            self.logger.info('length: {}'.format(len(morphemes)))
             return {}
 
         # 出現回数の辞書
@@ -122,35 +129,9 @@ class PrepareChain(object):
         # endを追加
         triplet = (morphemes[-2], morphemes[-1], PrepareChain.END)
         triplet_freqs[triplet] = 1
-
+        self.logger.debug("done made triplet")
+        self.logger.debug(triplet_freqs)
         return triplet_freqs
-
-    def save(self, triplet_freqs, init=False):
-        """
-        3つ組毎に出現回数をDBに保存
-        @param triplet_freqs 3つ組とその出現回数の辞書 key: 3つ組（タプル） val: 出現回数
-        """
-        # DBオープン
-        con = sqlite3.connect(PrepareChain.DB_PATH)
-
-        # 初期化から始める場合
-        if init:
-            # DBの初期化
-            with open(PrepareChain.DB_SCHEMA_PATH, "r") as f:
-                schema = f.read()
-                con.executescript(schema)
-
-            # データ整形
-            datas = [(triplet[0], triplet[1], triplet[2], freq)
-                     for (triplet, freq) in list(triplet_freqs.items())]
-
-            # データ挿入
-            p_statement = "insert into chain_freqs (prefix1, prefix2, suffix, freq) values (?, ?, ?, ?)"
-            con.executemany(p_statement, datas)
-
-        # コミットしてクローズ
-        con.commit()
-        con.close()
 
     def save_tsv(self, triplet_freqs, file_triplet_freqs, init=False):
         """
@@ -158,6 +139,8 @@ class PrepareChain(object):
         @param triplet_freqs 3つ組とその出現回数の辞書 key: 3つ組（タプル） val: 出現回数
         """
         with open(file_triplet_freqs, 'w', newline='') as f:
+            self.logger.debug(
+                'save triplet freqs: {}'.format(file_triplet_freqs))
             # ファイル出力準備
             writecsv = csv.DictWriter(
                 f,
@@ -304,17 +287,17 @@ if __name__ == '__main__':
 　私はこの想像を熱心に追求した。「そうしたらあの気詰まりな丸善も粉葉みじんだろう」
 　そして私は活動写真の看板画が奇体な趣きで街を彩っている京極を下って行った。"""
 
-    tweet_list = []
-    tweet_text_list = []
-    with open('/Users/user/products/prd_twistory/get_tweets_assets/nobody_tsurai/tweets_3200_nobody_tsurai.tsv', newline='') as f:
-        reader = csv.DictReader(f, delimiter='\t')
-        for row in reader:
-            tweet_text_list.append(row['tweet_text'])
-    text = "".join(tweet_text_list[:-1])
+    # tweet_list = []
+    # tweet_text_list = []
+    # with open('', newline='') as f:
+    #     reader = csv.DictReader(f, delimiter='\t')
+    #     for row in reader:
+    #         tweet_text_list.append(row['tweet_text'])
+    # text = "。".join(tweet_text_list[:-1])
     chain = PrepareChain(text)
     triplet_freqs = chain.make_triplet_freqs()
     # print(triplet_freqs)
     # print(type(triplet_freqs))
     # chain.save(triplet_freqs, True)
     chain.save_tsv(triplet_freqs=triplet_freqs,
-                   file_triplet_freqs='triplet_freqs_nobody_tsurai_3200.tsv', init=True)
+                   file_triplet_freqs='triplet_freqs.tsv', init=True)

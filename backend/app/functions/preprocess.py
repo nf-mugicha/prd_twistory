@@ -13,8 +13,8 @@ url_pattern = 'https?://[\w/:%#\$&\?\(\)~\.=\+\-]+'
 hash_tag_pattern = '#[\w]+'
 
 
-def clean_tweet_text(tweets_text):
-    print(tweets_text)
+def clean_tweet_text(tweets_text, logger):
+    logger.debug(tweets_text)
     # リプライの場合は@アカウントのみを取り除く
     tweets_text_clean = re.sub(
         reply_pattern_bf, '', tweets_text)
@@ -27,6 +27,6 @@ def clean_tweet_text(tweets_text):
     # 半角カタカナ、全角英数、ローマ数字・丸数字、異体字を正規化
     tweets_text_clean = unicodedata.normalize("NFKC", tweets_text_clean)
 
-    print(tweets_text_clean)
+    logger.debug(tweets_text_clean)
     # 正規化した文字列を返す
     return tweets_text_clean

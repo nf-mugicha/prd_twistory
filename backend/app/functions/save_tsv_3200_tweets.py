@@ -13,7 +13,7 @@ import csv
 from .preprocess import clean_tweet_text
 
 
-def save_tsv_3200_tweets(all_tweets, filename_3200):
+def save_tsv_3200_tweets(all_tweets, filename_3200, logger):
     with open(filename_3200, 'w', newline='') as f:
         # ファイル出力準備
         writecsv = csv.DictWriter(
@@ -32,7 +32,7 @@ def save_tsv_3200_tweets(all_tweets, filename_3200):
             if tweet.text.startswith('RT'):
                 continue
             # ツイートテキストを前処理
-            tweet_text = clean_tweet_text(tweet.text)
+            tweet_text = clean_tweet_text(tweet.text, logger)
             # 連想配列に格納
             tweet_excerpt['id'] = tweet.id
             tweet_excerpt["tweet_text"] = tweet_text
