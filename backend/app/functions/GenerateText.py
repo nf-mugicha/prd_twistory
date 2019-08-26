@@ -59,6 +59,7 @@ class GenerateText(object):
             else:
                 generated_text += text
                 self.logger.info("text length:{}".format(len(generated_text)))
+                self.logger.info(generated_text)
                 break
 
         return generated_text

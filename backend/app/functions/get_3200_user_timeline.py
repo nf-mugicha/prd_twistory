@@ -23,14 +23,14 @@ def get_3200_user_timeline(account, user_timeline_3200_raw, logger):
         logger.error(latest_tweets)
     # 最新のツイートid取得
     latest_id = latest_tweets[0].id
-    logger.debug("now's latest id: {}".format(str(latest_tweets[0].id)))
+    logger.info("now's latest id: {}".format(str(latest_tweets[0].id)))
     # 直近200ツイートを格納
     all_tweets.extend(latest_tweets)
     # 取得するツイートがなくなるまで続ける
-    logger.debug("start 3200 tweets scraping")
+    logger.info("start 3200 tweets scraping")
     c = 1
     while len(latest_tweets) > 0:
-        logger.debug("count {0} max_id: {1}".format(c, all_tweets[-1].id-1))
+        logger.info("count {0} max_id: {1}".format(c, all_tweets[-1].id-1))
         latest_tweets = api.GetUserTimeline(
             screen_name=account,
             count=200,
@@ -42,6 +42,6 @@ def get_3200_user_timeline(account, user_timeline_3200_raw, logger):
     with open(user_timeline_3200_raw,
               "wb") as f:
         pickle.dump(all_tweets, f)
-        logger.debug("save raw data of 3200 tweets: {}".format(
+        logger.info("save raw data of 3200 tweets: {}".format(
             user_timeline_3200_raw))
     return all_tweets, latest_id

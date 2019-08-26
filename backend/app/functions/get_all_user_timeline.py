@@ -39,7 +39,7 @@ def get_all_user_timeline(
     # Creating key
     key = "&".join([consumer_secret, access_token_secret])
     key = key.encode("utf-8")
-    logger.info("Key: ".format(key))
+    logger.info("Key: {}".format(key))
 
     # For authentication
     timestamp = time.time()

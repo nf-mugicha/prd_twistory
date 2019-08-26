@@ -9,6 +9,7 @@ import os  # for nonce
 import pickle
 import csv
 import traceback
+import time
 
 from functions.get_3200_user_timeline import get_3200_user_timeline
 from functions.get_all_user_timeline import get_all_user_timeline
@@ -78,10 +79,10 @@ class TweetsGenerater(object):
                 self.filename_3200))
             all_tweets = []
             with open(self.filename_3200, 'r') as f:
-                reader = csv.DictReader(f)
+                reader = csv.DictReader(f, delimiter='\t')
                 for row in reader:
                     all_tweets.append(row)
-                max_id = all_tweets[-1]["max_id"]-1
+                max_id = int(all_tweets[-1]["id"])-1
         else:
             # 保存したpklファイルを開く
             with open(self.user_timeline_3200_raw, 'rb') as f:
@@ -122,13 +123,16 @@ class TweetsGenerater(object):
         # 。で繋げて１つのテキストにする
         text = "。".join(tweet_text_list[:-1])
         logger.debug("joined tweets text:\n{}\n".format(text))
-        # tsvファイルが存在したらgeneratorを立ち上げる
+        # 3gramsのtsvファイルが存在したらgeneratorを立ち上げる
         if os.path.exists(self.triplet_freqs_tsv):
             logger.info("{} exists".format(self.triplet_freqs_tsv))
             # tsvファイルからツイート生成
+            logger.info('start generate tweets')
             generator = GenerateText(logger)
-            logger.debug(generator.generate_from_tsv(self.triplet_freqs_tsv))
+            generator.generate_from_tsv(self.triplet_freqs_tsv)
+            logger.info('finish generate tweets')
         else:
+            logger.info('start make 3grams')
             # 3gramsを作る準備
             chain = PrepareChain(text, logger)
             # 三つ組のテキストと出現回数を保存
@@ -136,18 +140,24 @@ class TweetsGenerater(object):
             # tsvファイルに保存
             chain.save_tsv(triplet_freqs=triplet_freqs,
                            file_triplet_freqs=self.triplet_freqs_tsv, init=True)
+            logger.info('finished make 3grams')
             # tsvファイルからツイート生成
+            logger.info('start generate tweets')
             generator = GenerateText(logger)
-            logger.debug(generator.generate_from_tsv(self.triplet_freqs_tsv))
+            generator.generate_from_tsv(self.triplet_freqs_tsv)
+            logger.info('finish generate tweets')
 
 
 if __name__ == '__main__':
-    logger.debug('start main thread')
+    start = time.time()
+    logger.info('start generate tweet')
     try:
-        account = "MuggyTeaa"
+        account = "redemptionsong"
         logger.info('account name: {}'.format(account))
         tweets_generater = TweetsGenerater(account)
         tweets_generater.get_tweet()
         tweets_generater.generate_tweets()
+        elapsed_time = time.time() - start
+        logger.info('finish time: {} [sec.]'.format(elapsed_time))
     except:
         logger.error(traceback.format_exc())

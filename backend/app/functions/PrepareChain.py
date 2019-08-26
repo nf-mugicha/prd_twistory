@@ -109,9 +109,9 @@ class PrepareChain(object):
         self.logger.debug('make triplet')
         # 3つ組をつくれない場合は終える
         if len(morphemes) < 3:
-            self.logger.info(
+            self.logger.debug(
                 'not enough number of grams: {}'.format(morphemes))
-            self.logger.info('length: {}'.format(len(morphemes)))
+            self.logger.debug('length: {}'.format(len(morphemes)))
             return {}
 
         # 出現回数の辞書
