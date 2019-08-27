@@ -221,6 +221,7 @@ class TweetsGenerater(object):
             reader = csv.DictReader(f, delimiter='\t')
             for row in reader:
                 tweet_text_list.append(row['tweet_text'])
+        logger.info("{} tweets in this list now".format(len(tweet_text_list)))
         # 。で繋げて１つのテキストにする
         text = "。".join(tweet_text_list[:-1])
         logger.debug("joined tweets text:\n{}\n".format(text))
@@ -254,7 +255,7 @@ if __name__ == '__main__':
     start = time.time()
     logger.info('start generate tweet')
     try:
-        account = ""
+        account = "Pxilicon"
         logger.info('account name: {}'.format(account))
         tweets_generater = TweetsGenerater(account)
         tweets_generater.get_tweet()
