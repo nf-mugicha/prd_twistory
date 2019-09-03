@@ -70,7 +70,7 @@ class TweetsGenerater(object):
         self.triplet_freqs_tsv = "{0}/triplet_freqs_3200_{1}.tsv".format(
             self.filepath, account)
 
-    def _get_latest_tweets(self, since_id, account, filename_3200):
+    def get_latest_tweets(self, since_id, account, filename_3200):
         """
         最新から過去3200ツイートまでを保管する関数
         twitter-pythonライブラリを用いる。
@@ -100,6 +100,7 @@ class TweetsGenerater(object):
         logger.info("now's latest id: {}".format(str(latest_tweets[0].id)))
         # 直近200ツイートを格納
         all_tweets.extend(latest_tweets)
+        logger.info('latest tweet count: {}'.format(len(all_tweets)))
         # 取得するツイートがなくなるまで続ける
         logger.info("start tweets scraping more")
         c = 1
@@ -129,7 +130,8 @@ class TweetsGenerater(object):
             c = 0
             for tweet in all_tweets:
                 c = c+1
-                logger.info("count: {0}, {1}".format(c, tweet.id))
+                logger.info("writing count: {0}, {1}".format(c, tweet.id))
+                # 保存するツイートが重複しないように
                 if tweet.id == since_id:
                     break
                 # RTは除外
@@ -189,9 +191,10 @@ class TweetsGenerater(object):
                 logger.info('save 3200tweets: {}'.format(self.filename_3200))
                 logger.info('max_id: {}'.format(max_id))
                 logger.info('latest_id: {}'.format(latest_id))
+        return latest_id, self.account, self.filename_3200
         # 今保存されているものより新しいツイートを取得し、tsvファイルに上書きする
-        all_tweets, latest_id = self._get_latest_tweets(
-            latest_id, self.account, self.filename_3200)
+        # all_tweets, latest_id = self.get_latest_tweets(
+        #     latest_id, self.account, self.filename_3200)
         # todo 全データ取得APIを作るか不明なので一旦コメントアウト
         # 全データ保存ファイルが既に存在したら取ってくる
         # if os.path.exists(self.user_timeline_all_raw):
@@ -255,10 +258,15 @@ if __name__ == '__main__':
     start = time.time()
     logger.info('start generate tweet')
     try:
-        account = "Pxilicon"
+        account = "nobody_tsurai"
         logger.info('account name: {}'.format(account))
         tweets_generater = TweetsGenerater(account)
-        tweets_generater.get_tweet()
+        # 最新の3200ツイートを取得
+        latest_id, account, filename_3200 = tweets_generater.get_tweet()
+        # 今保存されているものより新しいツイートを取得し、tsvファイルに上書きする
+        tweets_generater.get_latest_tweets(
+            latest_id, account, filename_3200)
+        # ツイート生成
         tweets_generater.generate_tweets()
         elapsed_time = time.time() - start
         logger.info('finish time: {} [sec.]'.format(elapsed_time))
