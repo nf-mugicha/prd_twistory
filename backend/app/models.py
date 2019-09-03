@@ -90,6 +90,9 @@ class TweetsGenerater(object):
         except:
             logger.error(
                 "{} may be private account or does not exists, can not get user timeline".format(account))
+            # ディレクトリを消す
+            logger.error('delete directry: {}'.format(self.filepath))
+            os.rmdir(self.filepath)
             raise
         # もし取得するツイートがなかったらそのまま返す
         if len(latest_tweets) == 0:
@@ -105,11 +108,11 @@ class TweetsGenerater(object):
         logger.info("start tweets scraping more")
         c = 1
         while len(latest_tweets) > 0:
-            logger.info("count {0} max_id: {1}".format(c, all_tweets[-1].id-1))
+            logger.info("count {0} latest_id: {1}".format(c, int(latest_id)+1))
             latest_tweets = api.GetUserTimeline(
                 screen_name=account,
                 count=200,
-                since_id=latest_id
+                since_id=int(latest_id)+1
             )
             all_tweets.extend(latest_tweets)
             c = c+1
@@ -163,7 +166,11 @@ class TweetsGenerater(object):
         if not os.path.exists(self.user_timeline_3200_raw):
             # 3200件のツイートデータ取得・保存
             all_tweets, latest_id, max_id = get_3200_user_timeline(
-                self.account, self.user_timeline_3200_raw, logger)
+                self.account,
+                self.user_timeline_3200_raw,
+                logger,
+                self.filepath
+            )
         # tsvファイルもあればそれを開く
         if os.path.exists(self.filename_3200):
             logger.info('already done all tweets scraping')
@@ -258,7 +265,7 @@ if __name__ == '__main__':
     start = time.time()
     logger.info('start generate tweet')
     try:
-        account = "nobody_tsurai"
+        account = "obashuji"
         logger.info('account name: {}'.format(account))
         tweets_generater = TweetsGenerater(account)
         # 最新の3200ツイートを取得

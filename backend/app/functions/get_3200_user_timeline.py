@@ -6,10 +6,11 @@ twitter-pythonライブラリを用いる。
 from settings.certification import api
 import settings.twitter_api as twitter_api
 import pickle
+import os
 
 
-def get_3200_user_timeline(account, user_timeline_3200_raw, logger):
-    logger.info("start latests' 200 tweets scraping")
+def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
+    logger.info("start latests' 3200 tweets scraping")
     # 3200ツイートを入れる空のリストを用意
     all_tweets = []
     # 直近200ツイートを取得
@@ -21,6 +22,9 @@ def get_3200_user_timeline(account, user_timeline_3200_raw, logger):
     except:
         logger.error(
             "{} may be private account or does not exists, can not get user timeline".format(account))
+        # ディレクトリを消す
+        logger.error('delete directry: {}'.format(filepath))
+        os.rmdir(filepath)
         raise
     # 最新のツイートid取得
     latest_id = latest_tweets[0].id
