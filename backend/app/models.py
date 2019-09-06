@@ -80,6 +80,8 @@ class TweetsGenerater(object):
             "start latests' 200 tweets scraping since_id: {}".format(since_id))
         # 3200ツイートを入れる空のリストを用意
         all_tweets = []
+        # since_idを探すための箱
+        search_id_list = []
         # 直近200ツイートを取得
         try:
             latest_tweets = api.GetUserTimeline(
@@ -98,25 +100,38 @@ class TweetsGenerater(object):
         if len(latest_tweets) == 0:
             logger.info("Nothing of latest tweets")
             return all_tweets, since_id
-        # since_idから遡った200件の、最も新しいid（200件以上新作があった時に使う）
-        latest_id = latest_tweets[0].id
-        logger.info("now's latest id: {}".format(str(latest_tweets[0].id)))
-        # 直近200ツイートを格納
-        all_tweets.extend(latest_tweets)
-        logger.info('latest tweet count: {}'.format(len(all_tweets)))
-        # 取得するツイートがなくなるまで続ける
-        logger.info("start tweets scraping more")
-        c = 1
-        while len(latest_tweets) > 0:
-            logger.info("count {0} latest_id: {1}".format(c, int(latest_id)+1))
-            latest_tweets = api.GetUserTimeline(
-                screen_name=account,
-                count=200,
-                since_id=int(latest_id)+1
-            )
+        # 取得ツイートが200以下だったらいっぺんに格納する
+        if len(latest_tweets) < 200:
             all_tweets.extend(latest_tweets)
-            c = c+1
-        logger.info("latest tweets {} counts".format(len(all_tweets)))
+            # since_idから遡った200件の、最も新しいid（200件以上新作があった時に使う）
+            latest_id = int(all_tweets[0].id)
+            max_id = int(all_tweets[-1].id)-1
+        elif len(latest_tweets) == 200:
+            # とりあえず全件格納する
+            all_tweets.extend(latest_tweets)
+            # 200ツイート取得しているということは、最新ツイートが200ツイート以上ある可能性が高いので、更に取得する
+            logger.info("start 200 more tweets scraping")
+            c = 1
+            since_id_flag = True
+            while since_id_flag:
+                logger.info(
+                    "count {0} latest_id: {1}".format(c, latest_tweets[0].id))
+                latest_tweets = api.GetUserTimeline(
+                    screen_name=account,
+                    count=200,
+                    max_id=int(all_tweets[-1].id)-1
+                )
+                # 取得した200ツイートを格納
+                for i, l in enumerate(latest_tweets):
+                    # since_idに到達したら終わり
+                    if l.id == since_id:
+                        since_id_flag = False
+                        break
+                    # リストに追加する
+                    all_tweets.append(l)
+                c = c+1
+            latest_id = int(all_tweets[0].id)
+            max_id = int(all_tweets[-1].id)-1
         # 取得した3200ツイート生データをファイル書き出ししておく
         with open(filename_3200, "a", newline="") as f:
             # ファイル出力準備
@@ -133,9 +148,8 @@ class TweetsGenerater(object):
             c = 0
             for tweet in all_tweets:
                 c = c+1
-                logger.info("writing count: {0}, {1}".format(c, tweet.id))
                 # 保存するツイートが重複しないように
-                if tweet.id == since_id:
+                if tweet.id < since_id:
                     break
                 # RTは除外
                 if tweet.text.startswith('RT'):
@@ -158,7 +172,10 @@ class TweetsGenerater(object):
                 writecsv.writerow(tweet_excerpt)
                 # 辞書を初期化
                 tweet_excerpt = {}
+            # logger.info("writing count: {0}".format(c))
             latest_id = all_tweets[0].id-1
+            logger.info("{0} new tweets, latest id: {1}".format(
+                len(all_tweets), all_tweets[0].id))
         return all_tweets, latest_id
 
     def get_tweet(self):
@@ -265,7 +282,7 @@ if __name__ == '__main__':
     start = time.time()
     logger.info('start generate tweet')
     try:
-        account = "obashuji"
+        account = ""
         logger.info('account name: {}'.format(account))
         tweets_generater = TweetsGenerater(account)
         # 最新の3200ツイートを取得
