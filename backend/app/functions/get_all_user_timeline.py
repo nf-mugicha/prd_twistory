@@ -1,6 +1,6 @@
-from settings.certification import api
+# from settings.certification import api
 import csv
-import settings.twitter_api as twitter_api
+# import settings.twitter_api as twitter_api
 from urllib.parse import urlencode, quote, quote_plus
 import hashlib
 import hmac

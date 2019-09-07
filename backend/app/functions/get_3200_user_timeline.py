@@ -3,8 +3,8 @@
 twitter-pythonライブラリを用いる。
 取得したツイートはTwitter.Status型のリストをpklファイルに保存する
 """
-from settings.certification import api
-import settings.twitter_api as twitter_api
+# from settings.certification import api
+# import settings.twitter_api as twitter_api
 import pickle
 import os
 

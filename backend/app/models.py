@@ -11,21 +11,22 @@ import csv
 import traceback
 import time
 
-from functions.get_3200_user_timeline import get_3200_user_timeline
-from functions.get_all_user_timeline import get_all_user_timeline
-from functions.save_tsv_3200_tweets import save_tsv_3200_tweets
-from functions.save_tsv_all_tweets import save_tsv_all_tweets
-from functions.preprocess import clean_tweet_text
+# from functions.get_3200_user_timeline import get_3200_user_timeline
+# from functions.get_all_user_timeline import get_all_user_timeline
+# from functions.save_tsv_3200_tweets import save_tsv_3200_tweets
+# from functions.save_tsv_all_tweets import save_tsv_all_tweets
+# from functions.preprocess import clean_tweet_text
 
-from functions.PrepareChain import PrepareChain
-from functions.GenerateText import GenerateText
+from .functions.PrepareChain import PrepareChain
+from .functions.GenerateText import GenerateText
 
-from settings.logging import logging_setting
+# from settings.logging import logging_setting
 
-from settings.certification import api
-import settings.twitter_api as twitter_api
+# from settings.certification import api
+# import settings.twitter_api as twitter_api
+from .settings.certification import api
 
-logger = logging_setting('TweetGeneratorLogging')
+# logger = logging_setting('TweetGeneratorLogging')
 
 
 def vue_app(app_name="VUE-FLASK"):
@@ -47,12 +48,13 @@ class TweetsGenerater(object):
     マルコフ連鎖でツイート生成する。
     """
 
-    def __init__(self, account):
+    def __init__(self, account, logger):
         """
         初期化メソッド
         @param account アカウント名
         """
         self.account = account
+        self.logger = logger
         self.filepath = "get_tweets_assets/{0}".format(account)
         # ユーザーごとにフォルダを分ける
         if not os.path.exists(self.filepath):
@@ -76,7 +78,7 @@ class TweetsGenerater(object):
         twitter-pythonライブラリを用いる。
         取得したツイートはTwitter.Status型のリストをpklファイルに保存する
         """
-        logger.info(
+        self.logger.info(
             "start latests' 200 tweets scraping since_id: {}".format(since_id))
         # 3200ツイートを入れる空のリストを用意
         all_tweets = []
@@ -90,15 +92,15 @@ class TweetsGenerater(object):
                 since_id=since_id
             )
         except:
-            logger.error(
+            self.logger.error(
                 "{} may be private account or does not exists, can not get user timeline".format(account))
             # ディレクトリを消す
-            logger.error('delete directry: {}'.format(self.filepath))
+            self.logger.error('delete directry: {}'.format(self.filepath))
             os.rmdir(self.filepath)
             raise
         # もし取得するツイートがなかったらそのまま返す
         if len(latest_tweets) == 0:
-            logger.info("Nothing of latest tweets")
+            self.logger.info("Nothing of latest tweets")
             return all_tweets, since_id
         # 取得ツイートが200以下だったらいっぺんに格納する
         if len(latest_tweets) < 200:
@@ -110,11 +112,11 @@ class TweetsGenerater(object):
             # とりあえず全件格納する
             all_tweets.extend(latest_tweets)
             # 200ツイート取得しているということは、最新ツイートが200ツイート以上ある可能性が高いので、更に取得する
-            logger.info("start 200 more tweets scraping")
+            self.logger.info("start 200 more tweets scraping")
             c = 1
             since_id_flag = True
             while since_id_flag:
-                logger.info(
+                self.logger.info(
                     "count {0} latest_id: {1}".format(c, latest_tweets[0].id))
                 latest_tweets = api.GetUserTimeline(
                     screen_name=account,
@@ -155,7 +157,7 @@ class TweetsGenerater(object):
                 if tweet.text.startswith('RT'):
                     continue
                 # ツイートテキストを前処理
-                tweet_text = clean_tweet_text(tweet.text, logger)
+                tweet_text = clean_tweet_text(tweet.text, self.logger)
                 # 連想配列に格納
                 tweet_excerpt['id'] = tweet.id
                 tweet_excerpt["tweet_text"] = tweet_text
@@ -174,7 +176,7 @@ class TweetsGenerater(object):
                 tweet_excerpt = {}
             # logger.info("writing count: {0}".format(c))
             latest_id = all_tweets[0].id-1
-            logger.info("{0} new tweets, latest id: {1}".format(
+            self.logger.info("{0} new tweets, latest id: {1}".format(
                 len(all_tweets), all_tweets[0].id))
         return all_tweets, latest_id
 
@@ -185,13 +187,13 @@ class TweetsGenerater(object):
             all_tweets, latest_id, max_id = get_3200_user_timeline(
                 self.account,
                 self.user_timeline_3200_raw,
-                logger,
+                self.logger,
                 self.filepath
             )
         # tsvファイルもあればそれを開く
         if os.path.exists(self.filename_3200):
-            logger.info('already done all tweets scraping')
-            logger.info("open file of 3200 tweets data: {}".format(
+            self.logger.info('already done all tweets scraping')
+            self.logger.info("open file of 3200 tweets data: {}".format(
                 self.filename_3200))
             all_tweets = []
             all_tweets_id = []
@@ -202,8 +204,8 @@ class TweetsGenerater(object):
                     all_tweets_id.append(int(row["id"]))
                 max_id = int(min(all_tweets_id))-1
                 latest_id = int(max(all_tweets_id))
-                logger.info('max_id: {}'.format(max_id))
-                logger.info('latest_id: {}'.format(latest_id))
+                self.logger.info('max_id: {}'.format(max_id))
+                self.logger.info('latest_id: {}'.format(latest_id))
 
         else:
             # 保存したpklファイルを開く
@@ -211,10 +213,11 @@ class TweetsGenerater(object):
                 all_tweets = pickle.load(f)
                 # 3200ツイート取得・tsvファイルに保存
                 all_tweets, max_id, latest_id = save_tsv_3200_tweets(
-                    all_tweets, self.filename_3200, logger)
-                logger.info('save 3200tweets: {}'.format(self.filename_3200))
-                logger.info('max_id: {}'.format(max_id))
-                logger.info('latest_id: {}'.format(latest_id))
+                    all_tweets, self.filename_3200, self.logger)
+                self.logger.info(
+                    'save 3200tweets: {}'.format(self.filename_3200))
+                self.logger.info('max_id: {}'.format(max_id))
+                self.logger.info('latest_id: {}'.format(latest_id))
         return latest_id, self.account, self.filename_3200
         # 今保存されているものより新しいツイートを取得し、tsvファイルに上書きする
         # all_tweets, latest_id = self.get_latest_tweets(
@@ -243,15 +246,16 @@ class TweetsGenerater(object):
         # ツイートテキストだけを抽出する
         tweet_text_list = []
         with open(self.filename_3200, newline='') as f:
-            logger.debug("open: {}".format(self.filename_3200))
+            self.logger.debug("open: {}".format(self.filename_3200))
             # with open(self.filename_all, newline='') as f:
             reader = csv.DictReader(f, delimiter='\t')
             for row in reader:
                 tweet_text_list.append(row['tweet_text'])
-        logger.info("{} tweets in this list now".format(len(tweet_text_list)))
+        self.logger.info(
+            "{} tweets in this list now".format(len(tweet_text_list)))
         # 。で繋げて１つのテキストにする
         text = "。".join(tweet_text_list[:-1])
-        logger.debug("joined tweets text:\n{}\n".format(text))
+        self.logger.debug("joined tweets text:\n{}\n".format(text))
         # 3gramsのtsvファイルが存在したらgeneratorを立ち上げる
         # if os.path.exists(self.triplet_freqs_tsv):
         #     logger.info("{} exists".format(self.triplet_freqs_tsv))
@@ -262,27 +266,29 @@ class TweetsGenerater(object):
         #     logger.info('finish generate tweets')
         # else:
         # 毎回最新ツイートを取得するため、毎回tsvファイルを読み込む
-        logger.info('start make 3grams')
+        self.logger.info('start make 3grams')
         # 3gramsを作る準備
-        chain = PrepareChain(text, logger)
+        chain = PrepareChain(text, self.logger)
         # 三つ組のテキストと出現回数を保存
         triplet_freqs = chain.make_triplet_freqs()
         # tsvファイルに保存
         chain.save_tsv(triplet_freqs=triplet_freqs,
                        file_triplet_freqs=self.triplet_freqs_tsv, init=True)
-        logger.info('finished make 3grams')
+        self.logger.info('finished make 3grams')
         # tsvファイルからツイート生成
-        logger.info('start generate tweets')
-        generator = GenerateText(logger)
-        generator.generate_from_tsv(self.triplet_freqs_tsv)
-        logger.info('finish generate tweets')
+        self.logger.info('start generate tweets')
+        generator = GenerateText(self.logger)
+        result_text = generator.generate_from_tsv(self.triplet_freqs_tsv)
+        self.logger.info('finish generate tweets')
+
+        return result_text
 
 
 if __name__ == '__main__':
     start = time.time()
     logger.info('start generate tweet')
     try:
-        account = ""
+        account = "Pxilicon"
         logger.info('account name: {}'.format(account))
         tweets_generater = TweetsGenerater(account)
         # 最新の3200ツイートを取得
