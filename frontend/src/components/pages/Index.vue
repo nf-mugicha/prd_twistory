@@ -1,9 +1,6 @@
 <template>
-  <div class="hello">
-    <!-- <h1>{{ msg }}</h1> -->
-    <h5>ユーザー名をタップするとユーザーページに飛ぶよ</h5>
-    <h6>ログインして書き込んでみてね</h6>
-    <user-profile />
+  <div class="index">
+    <h6>「あなたっぽい」ツイートを自動生成するよ</h6>
     <login />
   </div>
 </template>
@@ -12,6 +9,7 @@
 import Login from '../common/Login'
 import IndexList from '../IndexList'
 import UserProfile from '../UserProfile'
+import LinkList from './LinkList'
 export default {
   name: 'Index',
   data () {
@@ -22,7 +20,8 @@ export default {
   components: {
     'login': Login,
     'index-list': IndexList,
-    'user-profile': UserProfile
+    'user-profile': UserProfile,
+    'link-list': LinkList
   },
   computed: {
     userinfo () {

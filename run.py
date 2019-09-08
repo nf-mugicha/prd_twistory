@@ -14,7 +14,7 @@ from backend.app.models import TweetsGenerater
 from backend.app.settings.certification import api
 import backend.app.settings.twitter_api as twitter_api
 
-from flask import render_template
+from flask import render_template, request, make_response
 from backend.app.settings.logging import logging_setting
 
 from flask import Flask
@@ -33,12 +33,15 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/generate', methods=["GET"])
+@app.route('/generate', methods=["GET", "POST"])
 def tweet_generate():
     start = time.time()
     logger.info('start generate tweet')
     try:
-        account = "Pxilicon"
+        account_info = request.json
+        logger.info('POST data: {}'.format(account_info))
+        # account = "Pxilicon"
+        account = account_info['account']
         logger.info('account name: {}'.format(account))
         tweets_generater = TweetsGenerater(account, logger)
         # 最新の3200ツイートを取得

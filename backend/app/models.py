@@ -5,6 +5,7 @@
 """
 
 from flask import Flask
+from flask_cors import CORS
 import os  # for nonce
 import pickle
 import csv
@@ -15,7 +16,7 @@ import time
 # from functions.get_all_user_timeline import get_all_user_timeline
 # from functions.save_tsv_3200_tweets import save_tsv_3200_tweets
 # from functions.save_tsv_all_tweets import save_tsv_all_tweets
-# from functions.preprocess import clean_tweet_text
+from .functions.preprocess import clean_tweet_text
 
 from .functions.PrepareChain import PrepareChain
 from .functions.GenerateText import GenerateText
@@ -36,7 +37,7 @@ def vue_app(app_name="VUE-FLASK"):
         template_folder="./dist"
     )
     app.config.from_object('backend.app.settings.config.BaseConfig')
-
+    CORS(app, resources={'/*': {"origins": "*"}})
     return app
 
 

@@ -1,30 +1,21 @@
 <template>
   <div class="login__auth">
-    <!-- <template v-if="isAuth && userName && userPic">
-      <div class="header__user-image">
-        <img :src="userPic" />
-      </div>
-      <p class="header__user-name">
-        {{ userName }}
-        {{ user }}
-        {{ userinfo }}
-      </p>
-    </template>-->
     <v-btn dark color="#2196F3" v-if="isAuth" @click="signOut">Sign-Out</v-btn>
     <v-btn dark color="#2196F3" v-else @click="signIn">Twitter Login</v-btn>
   </div>
-  <!-- <router-view :isAuth="isAuth" :userName="userName" :userPic="userPic"></router-view> -->
 </template>
 
 <script>
 // firebase構成をインポートする
 import firebase from 'firebase'
 import Navbar from './Navbar'
+import LinkList from '.././pages/LinkList'
 
 export default {
   name: 'Login',
   components: {
-    Navbar
+    Navbar,
+    LinkList
   },
   data: function () {
     return {
@@ -68,11 +59,11 @@ export default {
   methods: {
     signIn: function () {
       this.$store.dispatch('auth/login')
-      // this.$router.push('/')
+      this.$router.push(LinkList)
     },
     signOut: function () {
       this.$store.dispatch('auth/logout')
-      // this.$router.push('/')
+      this.$router.push('/')
     }
   }
 }

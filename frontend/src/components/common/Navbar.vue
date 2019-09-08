@@ -1,41 +1,65 @@
 <template>
-  <v-card flat tile>
-    <v-toolbar color="primary">
-      <router-link to="/">
-        <v-toolbar-title>Co-Links</v-toolbar-title>
-        <!-- <v-toolbar-title>Index</v-toolbar-title> -->
+  <v-card flat tile
+  >
+    <v-toolbar dense>
+      <router-link
+      v-if="isLogin"
+      :to="{ name: 'LinkList', params: {screen_name: userinfo.screenName}}">
+      <v-toolbar-title>AI'm me -ついジェネ-</v-toolbar-title>
+      </router-link>
+      <router-link
+      v-else
+      to="/">
+        <v-toolbar-title>AI'm me -ついジェネ-</v-toolbar-title>
       </router-link>
       <v-spacer></v-spacer>
-      <!-- <v-btn icon>
-      <v-icon>search</v-icon>
-      </v-btn>-->
-      <v-toolbar-items>
-        <!-- <Login /> -->
-        <!-- <v-btn outline to="/page">Create page</v-btn> -->
-        <v-btn
-        outline
-        v-if="isLogin"
-        :to="{ name: 'LinkList', params: {screen_name: userinfo.screenName }}"
+      <v-app-bar-nav-icon
+      color="black"
+      @click.stop="drawer=!drawer"
+      >
+      <v-avatar
+      v-if="isLogin"
+      color="grey lighten-4"
+      >
+      <img
+        v-if="userinfo.photoURL"
+        :src="userinfo.photoURL"
+        alt="profile"
         >
-        User page</v-btn>
-        <v-btn dark color="#2196F3" v-else @click="signIn">Twitter Login</v-btn>
-      </v-toolbar-items>
+    </v-avatar>
+      </v-app-bar-nav-icon>
     </v-toolbar>
+
+    <v-navigation-drawer
+    v-model="drawer"
+    fixed
+    temporary
+    >
+    <v-list-item>
+      <Login />
+    </v-list-item>
+    <v-list-item>
+      <UserProfile />
+    </v-list-item>
+    </v-navigation-drawer>
   </v-card>
 </template>
 <script>
 import Login from './Login'
 import LinkList from '../pages/LinkList'
+import UserProfile from '../UserProfile'
 
 export default {
   name: 'Navbar',
   components: {
     Login,
-    LinkList
+    LinkList,
+    UserProfile
   },
   data () {
     return {
-      screenName: this.userinfo ? this.userinfo.screenName : null
+      screenName: this.userinfo ? this.userinfo.screenName : null,
+      drawer: null
     }
   },
   // props: {
