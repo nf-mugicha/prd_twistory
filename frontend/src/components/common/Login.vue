@@ -1,6 +1,6 @@
 <template>
   <div class="login__auth">
-    <v-btn dark color="#2196F3" v-if="isAuth" @click="signOut">Sign-Out</v-btn>
+    <v-btn dark color="#2196F3" v-if="isLogin" @click="signOut">Sign-Out</v-btn>
     <v-btn dark color="#2196F3" v-else @click="signIn">Twitter Login</v-btn>
   </div>
 </template>
@@ -59,7 +59,7 @@ export default {
   methods: {
     signIn: function () {
       this.$store.dispatch('auth/login')
-      this.$router.push(LinkList)
+      this.$router.push()
     },
     signOut: function () {
       this.$store.dispatch('auth/logout')

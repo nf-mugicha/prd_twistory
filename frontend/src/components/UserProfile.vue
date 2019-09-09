@@ -16,6 +16,9 @@ height="100px"
 src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
 >
 </v-img>
+<router-link
+v-bind:to="{name: 'LinkList', params: {screen_name: userinfo.screenName}}"
+>
 <v-card-title
 class="name align-end justify-center fill-height">
     <v-avatar
@@ -28,12 +31,9 @@ v-if="userinfo.photoURL"
 alt="profile"
 >
 </v-avatar>
-<v-btn
-v-bind:to="{name: 'LinkList', params: {screen_name: userinfo.screenName}}"
->
 {{ userinfo.displayName }}
-</v-btn>
 </v-card-title>
+</router-link>
         <ul class="icon">
         <li class="twitter"><a :href="userinfo.twitterURL" target="_blank"><font-awesome-icon :icon="['fab', 'twitter']" /></a></li>
     </ul>
