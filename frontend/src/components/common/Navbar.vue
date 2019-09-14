@@ -2,16 +2,18 @@
   <v-card flat tile
   >
     <v-toolbar dense>
+      <div >
       <router-link
       v-if="isLogin"
       :to="{ name: 'LinkList', params: {screen_name: userinfo.screenName}}">
-      <v-toolbar-title>AI'm me -ついジェネ-</v-toolbar-title>
+      <v-toolbar-title>AItter -ついじぇね-</v-toolbar-title>
       </router-link>
       <router-link
       v-else
       to="/">
-        <v-toolbar-title>AI'm me -ついジェネ-</v-toolbar-title>
+        <v-toolbar-title>AItter -ついじぇね-</v-toolbar-title>
       </router-link>
+      </div>
       <v-spacer></v-spacer>
       <v-app-bar-nav-icon
       color="black"
@@ -34,9 +36,14 @@
     v-model="drawer"
     fixed
     temporary
+    v-if="isLogin"
     >
     <v-list-item>
-      <Login />
+      <v-btn
+    class="light-blue darken-1 white--text text-center"
+    >
+      <login />
+    </v-btn>
     </v-list-item>
     <v-list-item>
       <UserProfile />

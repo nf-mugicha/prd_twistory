@@ -3,10 +3,11 @@
 twitter-pythonライブラリを用いる。
 取得したツイートはTwitter.Status型のリストをpklファイルに保存する
 """
-# from settings.certification import api
+from ..settings.certification import api
 # import settings.twitter_api as twitter_api
 import pickle
 import os
+import shutil
 
 
 def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
@@ -19,12 +20,19 @@ def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
             screen_name=account,
             count=200
         )
+    except ConnectionResetError as e:
+        logger.error('ConnectionResetError, do retry')
+        logger.error(e)
+        latest_tweets = api.GetUserTimeline(
+            screen_name=account,
+            count=200
+        )
     except:
         logger.error(
             "{} may be private account or does not exists, can not get user timeline".format(account))
         # ディレクトリを消す
         logger.error('delete directry: {}'.format(filepath))
-        os.rmdir(filepath)
+        shutil.rmtree(filepath)
         raise
     # 最新のツイートid取得
     latest_id = latest_tweets[0].id

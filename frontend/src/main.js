@@ -32,7 +32,7 @@ Vue.use(moment)
 
 Vue.config.productionTip = false
 
-const createApp = () => {
+let createApp = (callback) => {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
       console.log(user)
@@ -41,13 +41,13 @@ const createApp = () => {
       store.dispatch('auth/currentUser', null)
     }
   })
+
   /* eslint-disable no-new */
   new Vue({
     el: '#app',
 
     // 他のコンポーネトから、this.$routerやthis.$storeという方法でルーターや洗濯したパラメータの情報にアクセスできる
     'router': router,
-
     'store': store,
     components: { App },
     vuetify,

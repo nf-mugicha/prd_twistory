@@ -6,16 +6,17 @@
 
 from flask import Flask
 from flask_cors import CORS
-import os  # for nonce
+import os
+import shutil
 import pickle
 import csv
 import traceback
 import time
 
-# from functions.get_3200_user_timeline import get_3200_user_timeline
-# from functions.get_all_user_timeline import get_all_user_timeline
-# from functions.save_tsv_3200_tweets import save_tsv_3200_tweets
-# from functions.save_tsv_all_tweets import save_tsv_all_tweets
+from .functions.get_3200_user_timeline import get_3200_user_timeline
+from .functions.get_all_user_timeline import get_all_user_timeline
+from .functions.save_tsv_3200_tweets import save_tsv_3200_tweets
+from .functions.save_tsv_all_tweets import save_tsv_all_tweets
 from .functions.preprocess import clean_tweet_text
 
 from .functions.PrepareChain import PrepareChain
@@ -23,7 +24,6 @@ from .functions.GenerateText import GenerateText
 
 # from settings.logging import logging_setting
 
-# from settings.certification import api
 # import settings.twitter_api as twitter_api
 from .settings.certification import api
 
@@ -92,13 +92,21 @@ class TweetsGenerater(object):
                 count=200,
                 since_id=since_id
             )
-        except:
+        except ConnectionResetError as e:
+            self.logger.error('ConnectionResetError, do retry')
+            self.logger.error(e)
+            latest_tweets = api.GetUserTimeline(
+                screen_name=account,
+                count=200,
+                since_id=since_id
+            )
+        except Exception as e:
             self.logger.error(
-                "{} may be private account or does not exists, can not get user timeline".format(account))
+                "{} could not get latest tweets".format(account))
             # ディレクトリを消す
-            self.logger.error('delete directry: {}'.format(self.filepath))
-            os.rmdir(self.filepath)
-            raise
+            self.logger.error(e)
+            # 最新ツイート取得できなかったら、空のリストを返す（既に3200ツイートは取得し終えているのでそれで賄う）
+            latest_tweets = []
         # もし取得するツイートがなかったらそのまま返す
         if len(latest_tweets) == 0:
             self.logger.info("Nothing of latest tweets")

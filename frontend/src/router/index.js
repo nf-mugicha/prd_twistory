@@ -6,7 +6,6 @@ import VueRouter from 'vue-router'
 
 // ページコンポーネントのインポート
 import LinkList from '../components/pages/LinkList'
-import LinkPage from '../components/pages/LinkPage'
 import NotFound from '../components/pages/NotFound'
 import MarkDownPanel from '../components/MarkDownPanel'
 import Index from '../components/pages/Index'
@@ -21,15 +20,6 @@ const routes = [{
   component: Index
 },
 {
-  path: '/:screen_name/:link_id',
-  name: 'LinkPage',
-  component: LinkPage,
-  props: true, // データの受け渡しを可能にする
-  meta: {
-    title: 'details of link'
-  }
-},
-{
   path: '/:screen_name',
   name: 'LinkList',
   component: LinkList,
@@ -39,8 +29,12 @@ const routes = [{
   }
 },
 {
-  path: '*',
+  path: '/404',
   component: NotFound
+},
+{
+  path: '*',
+  redirect: '/404'
 },
 {
   path: '/panel',

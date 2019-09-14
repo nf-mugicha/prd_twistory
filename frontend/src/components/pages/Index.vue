@@ -1,29 +1,28 @@
 <template>
-  <div class="index">
-    <h6>「あなたっぽい」ツイートを自動生成するよ</h6>
-    <login />
+  <div class="index__conteiner text-center">
+    <h5>自分botを作ってみよう！</h5>
+    <h6 class="index__description">Aitter -ついじぇね- は、機械学習を使って「あなたっぽい」ツイートを自動生成するサービスです</h6>
+    <v-btn
+    class="light-blue darken-1 white--text text-center"
+    >
+      <login />
+    </v-btn>
   </div>
 </template>
 
 <script>
 import Login from '../common/Login'
-import IndexList from '../IndexList'
-import UserProfile from '../UserProfile'
-import LinkList from './LinkList'
+import LinkList from '../pages/LinkList'
 export default {
   name: 'Index',
-  data () {
-    return {
-      msg: 'Index'
-    }
-  },
   components: {
     'login': Login,
-    'index-list': IndexList,
-    'user-profile': UserProfile,
     'link-list': LinkList
   },
   computed: {
+    isLogin () {
+      return this.$store.getters['auth/check']
+    },
     userinfo () {
       return this.$store.getters['auth/user']
     }
@@ -46,5 +45,12 @@ li {
 }
 a {
   color: #42b983;
+}
+.index__description {
+  font-size: small;
+  padding: 10px;
+}
+.index__conteiner {
+  margin: auto;
 }
 </style>

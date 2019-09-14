@@ -1,14 +1,15 @@
 <template>
-  <div class="tweetlist">
-    <!-- <user-profile
-    v-bind:user_profile="screen_name"
-     /> -->
+  <div class="tweetlist index__conteiner text-center">
+    <h5>自分botを作ってみよう！</h5>
+    <h6 class="index__description">Aitter -ついじぇね- は、機械学習を使って「あなたっぽい」ツイートを自動生成するサービスです</h6>
+    <not-found v-if="NotFound"></not-found>
+    <div v-else>
      <v-card
      v-if="generatedTweet"
      class="mx-auto"
      color="#26c6da"
      dark
-     max-width="400"
+     width="100%"
      >
      <v-card-title>
        <v-icon
@@ -52,6 +53,7 @@
      class="primary"
      @click="TweetGenerate"
      >ツイート生成する</v-btn>
+     </div>
   </div>
 </template>
 
@@ -62,6 +64,8 @@ import LinkListCard from '../LinkListCard'
 import LinkListForm from '../LinkListForm'
 import UserProfile from '../UserProfile'
 import axios from 'axios'
+import NotFound from '../pages/NotFound'
+import { setTimeout } from 'timers'
 
 export default {
   name: 'LinkList',
@@ -70,37 +74,33 @@ export default {
     'one-link': OneLink,
     'link-list-card': LinkListCard,
     'link-list-form': LinkListForm,
-    'user-profile': UserProfile
+    'user-profile': UserProfile,
+    'not-found': NotFound
   },
   data () {
     return {
-      generatedTweet: null
+      generatedTweet: null,
+      NotFound: false
     }
   },
   props: [
     'screen_name'
   ],
   // pathの:idを直接書き換えた時の対応
-  // beforeRouteUpdate (to, from, next) {
-  //   // 動的セグメントが変わった場合は、コールバック関数でtargetIdを更新する
-  //   console.log('URL書き換え')
-  //   console.log(to.params)
-  //   this.screen_name = to.params.screen_name
-  //   next()
-  //   console.log('beforeRouteUpdateだよ')
-  //   this.init()
-  //   this.start(this.screen_name)
-  //   this.getUser(this.screen_name)
-  // },
-  // mounted () {
-  //   console.log('mountedだよ')
-  //   this.init()
-  //   this.start(this.screen_name)
-  //   // this.getUser(this.screen_name)
-  // },
-  // destroyed () {
-  //   this.stop()
-  // },
+  beforeRouteUpdate (to, from, next) {
+    // 動的セグメントが変わった場合は、コールバック関数でtargetIdを更新する
+    console.log('URL書き換え')
+    console.log(to.params)
+    this.screen_name = to.params.screen_name
+    // this.$route.replace('/404')
+    next()
+    // this.isTrueURL()
+  },
+  mounted () {
+    setTimeout(() => {
+      this.isTrueURL()
+    }, 2000)
+  },
   methods: {
     TweetGenerate () {
       // POST送信する
@@ -119,55 +119,53 @@ export default {
         .catch(error => {
           console.log(error)
         })
+    },
+    isTrueURL () {
+      console.log('ページが正しいか判定')
+      const userurl = this.$store.getters['auth/user']
+      if (userurl) {
+        console.log('ログインしてる')
+        if (userurl.screenName === this.$route.params.screen_name) {
+          console.log('正しいURL')
+          console.log(userurl.screenName)
+          this.NotFound = false
+        } else {
+          console.log('正しくないURL')
+          this.NotFound = true
+        }
+      } else {
+        console.log('インデックスに飛ばす')
+        this.$router.push('/')
+      }
     }
   },
-  //   init () {
-  //     console.log('メモを検索する')
-  //     this.$store.dispatch('links/clear')
-  //   },
-  //   start (screenName) {
-  //     console.log(screenName)
-  //     this.$store.dispatch('links/startListener', {screenName})
-  //   },
-  //   stop () {
-  //     this.$store.dispatch('links/stopListener')
-  //   },
-  //   remove (id) {
-  //     console.log(this.$store.dispatch('links/deleteLink', {id}))
-  //     this.$store.dispatch('links/deleteLink', {id})
-  //   },
-  //   getUser (userProfile) {
-  //     this.$store.dispatch('user/userData', {screen_name: userProfile})
-  //   }
-  // },
   // computedには結果がキャッシュされる
   // getterには引数は渡せない
   // ゲッター
   computed: {
-    userinfo () {
-      console.log('userinfo取得')
-      return this.$store.getters['auth/user']
-    },
     isLogin () {
-      console.log('ログイン判定取得')
       return this.$store.getters['auth/check']
+    },
+    userinfo () {
+      return this.$store.getters['auth/user']
     }
-    // links () {
-    //   console.log('getter')
-    //   return this.$store.getters['links/data']
-    // },
-    // userdata () {
-    //   return this.$store.getters['user/userProfile']
-    // }
   }
 }
 </script>
 <style>
 .tweetlist {
   margin: auto;
+  display: grid;
+  width: 100%;
+  height: fit-content;
 }
 
 .row__test__delete {
   margin: auto;
+}
+
+.index__description {
+  font-size: small;
+  padding: 10px;
 }
 </style>

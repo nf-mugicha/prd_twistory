@@ -39,9 +39,11 @@ def tweet_generate():
     logger.info('start generate tweet')
     try:
         account_info = request.json
-        logger.info('POST data: {}'.format(account_info))
-        # account = "Pxilicon"
-        account = account_info['account']
+        if type(account_info) == dict:
+            logger.info('POST data: {}'.format(account_info))
+            account = account_info['account']
+        else:
+            account = "shishisan3"
         logger.info('account name: {}'.format(account))
         tweets_generater = TweetsGenerater(account, logger)
         # 最新の3200ツイートを取得
@@ -56,6 +58,10 @@ def tweet_generate():
         return result_text
     except:
         logger.error(traceback.format_exc())
+        result_text = "ツイート生成に失敗しました。。もう一度やってみてください"
+        elapsed_time = time.time() - start
+        logger.error('error finish time: {} [sec.]'.format(elapsed_time))
+        return result_text
 
 
 if __name__ == '__main__':

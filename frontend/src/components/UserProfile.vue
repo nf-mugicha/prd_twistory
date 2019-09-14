@@ -1,6 +1,7 @@
 <template>
 <v-container class="align-center justify-center layout text-center">
 <v-card
+v-if="userinfo"
 class="prof mx-auto"
 width="100%"
 >
@@ -11,7 +12,7 @@ height="100px"
 >
 </v-img>
 <v-img
-v-else
+else
 height="100px"
 src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
 >
@@ -47,28 +48,28 @@ alt="profile"
 <script>
 export default {
   name: 'UserProfile',
-  props: {
-    'user_profile': {
-      type: String,
-      required: true
-    }
-  },
-  mounted () {
-    this.userProfile()
-  },
-  methods: {
-    userProfile () {
-      console.log(this.user_profile)
-      this.$store.dispatch('user/userData', {screen_name: this.user_profile})
-    }
-  },
+  // props: {
+  //   'user_profile': {
+  //     type: String,
+  //     required: true
+  //   }
+  // },
+  // mounted () {
+  //   this.userProfile()
+  // },
+  // methods: {
+  //   userProfile () {
+  //     console.log(this.user_profile)
+  //     this.$store.dispatch('user/userData', {screen_name: this.user_profile})
+  //   }
+  // },
   computed: {
     userinfo () {
       return this.$store.getters['auth/user']
-    },
-    userdata () {
-      return this.$store.getters['user/userProfile']
     }
+    // userdata () {
+    //   return this.$store.getters['user/userProfile']
+    // }
   }
 }
 </script>
