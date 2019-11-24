@@ -2,11 +2,7 @@
   <div class="index__conteiner text-center">
     <h5>自分botを作ってみよう！</h5>
     <h6 class="index__description">Aitter -ついじぇね- は、機械学習を使って「あなたっぽい」ツイートを自動生成するサービスです</h6>
-    <v-btn
-    class="light-blue darken-1 white--text text-center"
-    >
       <login />
-    </v-btn>
   </div>
 </template>
 

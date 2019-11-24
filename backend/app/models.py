@@ -92,7 +92,7 @@ class TweetsGenerater(object):
                 count=200,
                 since_id=since_id
             )
-        except ConnectionResetError as e:
+        except (ConnectionResetError) as e:
             self.logger.error('ConnectionResetError, do retry')
             self.logger.error(e)
             latest_tweets = api.GetUserTimeline(
@@ -105,6 +105,7 @@ class TweetsGenerater(object):
                 "{} could not get latest tweets".format(account))
             # ディレクトリを消す
             self.logger.error(e)
+            self.logger.error(traceback.format_exc())
             # 最新ツイート取得できなかったら、空のリストを返す（既に3200ツイートは取得し終えているのでそれで賄う）
             latest_tweets = []
         # もし取得するツイートがなかったらそのまま返す
@@ -125,23 +126,32 @@ class TweetsGenerater(object):
             c = 1
             since_id_flag = True
             while since_id_flag:
-                self.logger.info(
-                    "count {0} latest_id: {1}".format(c, latest_tweets[0].id))
-                latest_tweets = api.GetUserTimeline(
-                    screen_name=account,
-                    count=200,
-                    max_id=int(all_tweets[-1].id)-1
-                )
-                # 取得した200ツイートを格納
-                for i, l in enumerate(latest_tweets):
+                latest_id = int(all_tweets[-1].id)
+                try:
+                    latest_tweets = api.GetUserTimeline(
+                        screen_name=account,
+                        count=200,
+                        max_id=int(all_tweets[-1].id)-1
+                    )
+                except TwitterError as te:
+                    self.logger.error('Twitter error {}'.format(te))
+                    self.logger.error(traceback.format_exc())
+                    break
+                except Exception as e:
+                    self.logger.error('something wrong {}'.format(e))
+                    self.logger.error(traceback.format_exc())
+                    break
                     # since_idに到達したら終わり
-                    if l.id == since_id:
-                        since_id_flag = False
-                        break
+                if int(all_tweets[-1].id) == latest_id:
+                    since_id_flag = False
+                    break
+                for l in latest_tweets:
                     # リストに追加する
                     all_tweets.append(l)
+                # 取得した200ツイートを格納
                 c = c+1
-            latest_id = int(all_tweets[0].id)
+                self.logger.info(
+                    "count {0} latest_id: {1}".format(c, all_tweets[-1].id))
             max_id = int(all_tweets[-1].id)-1
         # 取得した3200ツイート生データをファイル書き出ししておく
         with open(filename_3200, "a", newline="") as f:

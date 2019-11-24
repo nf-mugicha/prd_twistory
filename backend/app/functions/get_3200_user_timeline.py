@@ -8,6 +8,7 @@ from ..settings.certification import api
 import pickle
 import os
 import shutil
+import time
 
 
 def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
@@ -20,20 +21,29 @@ def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
             screen_name=account,
             count=200
         )
-    except ConnectionResetError as e:
+    except (ConnectionResetError) as e:
         logger.error('ConnectionResetError, do retry')
         logger.error(e)
         latest_tweets = api.GetUserTimeline(
             screen_name=account,
             count=200
         )
-    except:
+        raise
+    except Exception as e:
         logger.error(
             "{} may be private account or does not exists, can not get user timeline".format(account))
         # ディレクトリを消す
         logger.error('delete directry: {}'.format(filepath))
         shutil.rmtree(filepath)
-        raise
+        for i in range(3 + 1):
+            logger.error('retry {}'.format(i))
+            sleep_sec = 2 ** i
+            logger.error('sleep {} sec'.format(sleep_sec))
+            time.sleep(sleep_sec)
+            latest_tweets = api.GetUserTimeline(
+                screen_name=account,
+                count=200
+            )
     # 最新のツイートid取得
     latest_id = latest_tweets[0].id
     logger.info("now's latest id: {}".format(str(latest_tweets[0].id)))

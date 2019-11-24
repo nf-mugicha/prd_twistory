@@ -12,13 +12,9 @@
      width="100%"
      >
      <v-card-title>
-       <v-icon
-       large
-       left
-       >
-       mdi-twitter
-       </v-icon>
-       <span class="title font-weight-light">Twitter</span>
+       <span class="title font-weight-light">
+         Generated {{ userinfo.displayName }}bot Tweet
+       </span>
      </v-card-title>
      <v-card-text class="headline font-weight-bold">
         {{ generatedTweet }}
@@ -31,27 +27,32 @@
          :src="userinfo.photoURL"
          ></v-img>
          </v-list-item-avatar>
-         <v-list-item-content>
-           <v-list-item-title>
-             Even You
+         <!-- <v-list-item-content
+         class="twitter__displayname"
+         > -->
+           <!-- <v-list-item-title>
+             {{ userinfo.displayName }}
            </v-list-item-title>
-         </v-list-item-content>
+         </v-list-item-content> -->
          <v-row
          align="center"
          justify="end"
          >
-         <v-icon class="mr-1">mdi-heart</v-icon>
-         <span class="subheading mr-2">256</span>
-         <span class="mr-1">.</span>
-         <v-icon class="mr-1">mdi-share0cariant</v-icon>
-         <span class="subheading">45</span>
+         <v-btn class="pink lighten-3 text-center white--text">
+           <font-awesome-icon :icon="['fab', 'twitter']"></font-awesome-icon>
+           ツイートする
+         <!-- <span class="subheading">45</span> -->
+         </v-btn>
          </v-row>
        </v-list-item>
      </v-card-actions>
      </v-card>
      <v-btn
-     class="primary"
-     @click="TweetGenerate"
+     class="primary btn__tweetgenerate"
+     @click.prevent="TweetGenerate"
+     :disabled="processing"
+     :loading="processing"
+     :block=true
      >ツイート生成する</v-btn>
      </div>
   </div>
@@ -80,7 +81,8 @@ export default {
   data () {
     return {
       generatedTweet: null,
-      NotFound: false
+      NotFound: false,
+      processing: false
     }
   },
   props: [
@@ -102,7 +104,9 @@ export default {
     }, 2000)
   },
   methods: {
-    TweetGenerate () {
+    TweetGenerate (btn) {
+      if (this.processing) return
+      this.processing = true
       // POST送信する
       axios.post(
         'http://127.0.0.1:5000/generate',
@@ -115,9 +119,12 @@ export default {
           console.log(res)
           console.log(res.data)
           this.generatedTweet = res.data
+          this.processing = false
         })
         .catch(error => {
           console.log(error)
+          this.processing = false
+          this.generatedTweet = 'ツイート生成に失敗しました。もう一度試してみてください'
         })
     },
     isTrueURL () {
@@ -167,5 +174,9 @@ export default {
 .index__description {
   font-size: small;
   padding: 10px;
+}
+
+.twitter__displayname {
+  width: 50px;
 }
 </style>
