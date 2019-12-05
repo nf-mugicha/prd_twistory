@@ -20,7 +20,6 @@
     <span dark color="#2196F3" v-if="isLogin" @click="signOut">Sign-Out</span>
     <span dark color="#2196F3" v-else @click="signIn">Twitter Login</span>
   </div> -->
-  </v-btn>
 </template>
 
 <script>

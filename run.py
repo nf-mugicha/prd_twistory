@@ -43,7 +43,7 @@ def tweet_generate():
             logger.info('POST data: {}'.format(account_info))
             account = account_info['account']
         else:
-            account = "aquirax_k"
+            account = ""
         logger.info('account name: {}'.format(account))
         tweets_generater = TweetsGenerater(account, logger)
         # 最新の3200ツイートを取得
@@ -58,7 +58,7 @@ def tweet_generate():
         return result_text
     except:
         logger.error(traceback.format_exc())
-        result_text = "ツイート生成に失敗しました。。もう一度やってみてください。また、鍵アカウントはツイート生成できません。。"
+        result_text = "ツイート生成に失敗しました。もう一度やってみてください。\nまた、鍵アカウントはツイート生成できません。"
         elapsed_time = time.time() - start
         logger.error('error finish time: {} [sec.]'.format(elapsed_time))
         return result_text
