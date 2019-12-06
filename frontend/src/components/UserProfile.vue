@@ -12,7 +12,7 @@ height="100px"
 >
 </v-img>
 <v-img
-else
+v-else
 height="100px"
 src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
 >

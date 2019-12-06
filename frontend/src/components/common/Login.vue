@@ -78,14 +78,18 @@ export default {
   methods: {
     signIn: function () {
       if (this.processing) return
-      this.processing = true
-      this.$store.dispatch('auth/login')
-      setTimeout(() => {
-        const userlogin = this.$store.getters['auth/user']
-        console.log(userlogin)
-        this.$router.push({ name: 'LinkList', params: { screen_name: userlogin.screenName } })
-        this.processing = false
-      }, 10000)
+      try {
+        this.processing = true
+        this.$store.dispatch('auth/login')
+        setTimeout(() => {
+          const userlogin = this.$store.getters['auth/user']
+          console.log(userlogin)
+          this.$router.push({ name: 'LinkList', params: { screen_name: userlogin.screenName } })
+          this.processing = false
+        }, 10000)
+      } catch (e) {
+        this.processing = true
+      }
     },
     signOut: function () {
       this.$store.dispatch('auth/logout')

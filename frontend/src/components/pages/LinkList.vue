@@ -7,13 +7,13 @@
      <v-card
      v-if="generatedTweet"
      class="mx-auto"
-     color="#26c6da"
-     dark
+     color="#FFFFFF"
+
      width="100%"
      >
      <v-card-title>
        <span class="title font-weight-light">
-         Generated {{ userinfo.displayName }}bot Tweet
+         {{ userinfo.displayName }}bot Tweet
        </span>
      </v-card-title>
      <v-card-text class="headline font-weight-bold">
@@ -38,7 +38,7 @@
          align="center"
          justify="end"
          >
-         <v-btn class="pink lighten-3 text-center white--text">
+         <v-btn class="light-blue darken-1 text-center white--text">
            <font-awesome-icon :icon="['fab', 'twitter']"></font-awesome-icon>
            ツイートする
          <!-- <span class="subheading">45</span> -->

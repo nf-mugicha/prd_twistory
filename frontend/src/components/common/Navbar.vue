@@ -39,11 +39,7 @@
     v-if="isLogin"
     >
     <v-list-item>
-      <v-btn
-    class="light-blue darken-1 white--text text-center"
-    >
       <login />
-    </v-btn>
     </v-list-item>
     <v-list-item>
       <UserProfile />
