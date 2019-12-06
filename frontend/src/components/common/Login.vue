@@ -87,6 +87,7 @@ export default {
           this.$router.push({ name: 'LinkList', params: { screen_name: userlogin.screenName } })
           this.processing = false
         }, 10000)
+        this.processing = false
       } catch (e) {
         this.processing = false
       }
