@@ -59,7 +59,7 @@ export default {
       { name: 'Home', path: '/', component: Index },
       { name: 'プライバシーポリシー', path: '/privacy-policy', component: PrivacyPlicy },
       { name: '利用規約', path: '/service', component: TermsOfService },
-      { name: '公式Twitter', path: '/', component: Index }
+      { name: 'お問い合わせ', path: '/', component: Index }
     ]
   }),
   computed: {
