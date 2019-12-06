@@ -88,7 +88,7 @@ export default {
           this.processing = false
         }, 10000)
       } catch (e) {
-        this.processing = true
+        this.processing = false
       }
     },
     signOut: function () {

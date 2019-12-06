@@ -138,7 +138,9 @@ export default {
           this.NotFound = false
         } else {
           console.log('正しくないURL')
-          this.NotFound = true
+          this.NotFound =
+
+          true
         }
       } else {
         console.log('インデックスに飛ばす')

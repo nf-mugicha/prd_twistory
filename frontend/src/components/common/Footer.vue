@@ -16,8 +16,9 @@
     text
     rounded
     class="footer__col1"
+    :to="link.path"
     >
-    {{ link }}
+    {{ link.name }}
     </v-btn>
     <v-btn
     color="white"
@@ -40,19 +41,35 @@
 
 <script>
 import Login from './Login'
+import LinkList from '../pages/LinkList'
+import Index from '../pages/Index'
+import TermsOfService from '../pages/TermsOfService'
+import PrivacyPlicy from '../pages/PrivacyPolicy'
 export default {
   name: 'Footer',
   components: {
-    Login
+    Login,
+    LinkList,
+    Index,
+    TermsOfService,
+    PrivacyPlicy
   },
   data: () => ({
     links: [
-      'Home',
-      'プライバシーポリシー',
-      '利用規約',
-      '公式Twitter'
+      { name: 'Home', path: '/', component: Index },
+      { name: 'プライバシーポリシー', path: '/privacy-policy', component: PrivacyPlicy },
+      { name: '利用規約', path: '/service', component: TermsOfService },
+      { name: '公式Twitter', path: '/', component: Index }
     ]
-  })
+  }),
+  computed: {
+    isLogin () {
+      return this.$store.getters['auth/check']
+    },
+    userinfo () {
+      return this.$store.getters['auth/user']
+    }
+  }
 }
 </script>
 <style>

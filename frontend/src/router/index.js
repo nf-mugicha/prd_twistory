@@ -7,8 +7,9 @@ import VueRouter from 'vue-router'
 // ページコンポーネントのインポート
 import LinkList from '../components/pages/LinkList'
 import NotFound from '../components/pages/NotFound'
-import MarkDownPanel from '../components/MarkDownPanel'
 import Index from '../components/pages/Index'
+import TermsOfService from '../components/pages/TermsOfService'
+import PrivacyPolicy from '../components/pages/PrivacyPolicy'
 
 // VueRouterプラグインを使用する
 // これによって<RouterView />コンポーネントなどを使うことができる
@@ -20,7 +21,7 @@ const routes = [{
   component: Index
 },
 {
-  path: '/:screen_name',
+  path: '/u/:screen_name',
   name: 'LinkList',
   component: LinkList,
   props: true,
@@ -33,12 +34,18 @@ const routes = [{
   component: NotFound
 },
 {
-  path: '*',
-  redirect: '/404'
+  name: 'TermsOfService',
+  path: '/service',
+  component: TermsOfService
 },
 {
-  path: '/panel',
-  component: MarkDownPanel
+  name: 'PrivacyPolicy',
+  path: '/privacy-policy',
+  component: PrivacyPolicy
+},
+{
+  path: '*',
+  redirect: '/404'
 }
 ]
 
