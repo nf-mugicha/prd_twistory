@@ -46,7 +46,8 @@
      </v-card-actions>
      </v-card>
      <v-btn
-     class="primary btn__tweetgenerate"
+     class="amber darken-4 btn__tweetgenerate"
+     dark
      @click.prevent="TweetGenerate"
      :disabled="processing"
      :loading="processing"

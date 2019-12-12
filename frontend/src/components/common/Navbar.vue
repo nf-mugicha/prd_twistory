@@ -2,17 +2,11 @@
   <v-card flat tile
   >
     <v-toolbar dense>
-      <div >
-      <router-link
-      v-if="isLogin"
-      to="/">
-      <v-toolbar-title>AItter -ついじぇね-</v-toolbar-title>
-      </router-link>
-      <router-link
-      v-else
-      to="/">
-        <v-toolbar-title>AItter -ついじぇね-</v-toolbar-title>
-      </router-link>
+      <div>
+      <v-toolbar-title
+      class="nav__title"
+      to="/"
+      >AItter -ついじぇね-</v-toolbar-title>
       </div>
       <v-spacer></v-spacer>
       <v-app-bar-nav-icon
@@ -93,3 +87,8 @@ export default {
   }
 }
 </script>
+<style>
+.nav__title {
+  color: #FF6F00;
+}
+</style>
