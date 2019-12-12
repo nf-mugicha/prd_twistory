@@ -17,8 +17,11 @@ height="100px"
 src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
 >
 </v-img>
-<router-link
+<!-- <router-link
 v-bind:to="{name: 'LinkList', params: {screen_name: userinfo.screenName}}"
+> -->
+<router-link
+to="/"
 >
 <v-card-title
 class="name align-end justify-center fill-height">

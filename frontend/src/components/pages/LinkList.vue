@@ -1,7 +1,5 @@
 <template>
   <div class="tweetlist index__conteiner text-center">
-    <!-- <h1>自分botを作ってみよう！</h1>
-    <h3 class="index__description">Aitter -ついじぇね- は、機械学習を使って「あなたっぽい」ツイートを自動生成するサービスです</h3> -->
     <not-found v-if="NotFound"></not-found>
     <div v-else>
      <v-card
@@ -11,9 +9,9 @@
 
      width="100%"
      >
-     <v-card-title>
-       <span class="title font-weight-light">
-         {{ userinfo.displayName }}bot Tweet
+     <v-card-title class="title__displayname">
+       <span class="font-weight-light">
+         Generated {{ userinfo.displayName }}bot Tweet
        </span>
      </v-card-title>
      <v-card-text class="headline font-weight-bold">
@@ -180,5 +178,9 @@ export default {
 
 .twitter__displayname {
   width: 50px;
+}
+
+.title__displayname {
+  font-size: 1rem;
 }
 </style>
