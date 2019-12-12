@@ -5,7 +5,7 @@
       <div >
       <router-link
       v-if="isLogin"
-      :to="{ name: 'LinkList', params: {screen_name: userinfo.screenName}}">
+      to="/">
       <v-toolbar-title>AItter -ついじぇね-</v-toolbar-title>
       </router-link>
       <router-link

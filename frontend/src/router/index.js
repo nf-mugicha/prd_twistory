@@ -26,7 +26,7 @@ const routes = [{
   component: LinkList,
   props: true,
   meta: {
-    title: 'link list'
+    title: 'screen_name'
   }
 },
 {

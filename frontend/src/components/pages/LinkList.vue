@@ -1,7 +1,7 @@
 <template>
   <div class="tweetlist index__conteiner text-center">
-    <h5>自分botを作ってみよう！</h5>
-    <h6 class="index__description">Aitter -ついじぇね- は、機械学習を使って「あなたっぽい」ツイートを自動生成するサービスです</h6>
+    <!-- <h1>自分botを作ってみよう！</h1>
+    <h3 class="index__description">Aitter -ついじぇね- は、機械学習を使って「あなたっぽい」ツイートを自動生成するサービスです</h3> -->
     <not-found v-if="NotFound"></not-found>
     <div v-else>
      <v-card
@@ -66,7 +66,6 @@ import LinkListForm from '../LinkListForm'
 import UserProfile from '../UserProfile'
 import axios from 'axios'
 import NotFound from '../pages/NotFound'
-import { setTimeout } from 'timers'
 
 export default {
   name: 'LinkList',
@@ -85,9 +84,12 @@ export default {
       processing: false
     }
   },
-  props: [
-    'screen_name'
-  ],
+  props: {
+    screen_name: {
+      type: String,
+      default: null
+    }
+  },
   // pathの:idを直接書き換えた時の対応
   beforeRouteUpdate (to, from, next) {
     // 動的セグメントが変わった場合は、コールバック関数でtargetIdを更新する
@@ -98,11 +100,11 @@ export default {
     next()
     // this.isTrueURL()
   },
-  mounted () {
-    setTimeout(() => {
-      this.isTrueURL()
-    }, 2000)
-  },
+  // mounted () {
+  //   setTimeout(() => {
+  //     this.isTrueURL()
+  //   }, 2000)
+  // },
   methods: {
     TweetGenerate (btn) {
       if (this.processing) return
@@ -138,9 +140,7 @@ export default {
           this.NotFound = false
         } else {
           console.log('正しくないURL')
-          this.NotFound =
-
-          true
+          this.NotFound = true
         }
       } else {
         console.log('インデックスに飛ばす')
@@ -174,7 +174,7 @@ export default {
 }
 
 .index__description {
-  font-size: small;
+  /* font-size: small; */
   padding: 10px;
 }
 

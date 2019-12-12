@@ -307,7 +307,7 @@ if __name__ == '__main__':
     start = time.time()
     logger.info('start generate tweet')
     try:
-        account = "gardenia3027"
+        account = ""
         logger.info('account name: {}'.format(account))
         tweets_generater = TweetsGenerater(account)
         # 最新の3200ツイートを取得

@@ -32,7 +32,7 @@
     class="yellow darken-4 py-4 text-center white--text"
     cols="12"
     >
-    {{ new Date().getFullYear() }} -- <strong>Aitter -ついじぇね- </strong>
+    {{ new Date().getFullYear() }} -- <strong>Aitter - ついじぇね - </strong>
     </v-col>
     </v-row>
     </v-footer>
@@ -41,7 +41,6 @@
 
 <script>
 import Login from './Login'
-import LinkList from '../pages/LinkList'
 import Index from '../pages/Index'
 import TermsOfService from '../pages/TermsOfService'
 import PrivacyPlicy from '../pages/PrivacyPolicy'
@@ -49,7 +48,6 @@ export default {
   name: 'Footer',
   components: {
     Login,
-    LinkList,
     Index,
     TermsOfService,
     PrivacyPlicy
