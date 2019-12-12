@@ -5,7 +5,6 @@ import VueRouter from 'vue-router'
 // import store from '../store'
 
 // ページコンポーネントのインポート
-import LinkList from '../components/pages/LinkList'
 import NotFound from '../components/pages/NotFound'
 import Index from '../components/pages/Index'
 import TermsOfService from '../components/pages/TermsOfService'
@@ -21,13 +20,13 @@ const routes = [{
   component: Index
 },
   // {
-  //   path: '/u/:screen_name',
-  //   name: 'LinkList',
-  //   component: LinkList,
-  //   props: true,
-  //   meta: {
-  //     title: 'screen_name'
-  //   }
+  //     path: '/u/:screen_name',
+  //     name: 'LinkList',
+  //     component: LinkList,
+  //     props: true,
+  //     meta: {
+  //         title: 'screen_name'
+  //     }
   // },
 {
   path: '/404',

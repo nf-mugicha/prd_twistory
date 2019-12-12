@@ -119,3 +119,12 @@ backend/app/settings/twitter_connect.py
 get_tweets_assets
 chain.db
 triplet_freqs*
+
+.firebase/
+.firebaserc
+database.rules.json
+firebase.json
+firestore.indexes.json
+firestore.rules
+functions/
+storage.rules
