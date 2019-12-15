@@ -11,7 +11,7 @@
      >
      <v-card-title class="title__displayname">
        <span class="font-weight-light">
-         Generated {{ userinfo.displayName }}bot Tweet
+         {{ userinfo.displayName }} bot のツイート
        </span>
      </v-card-title>
      <v-card-text class="headline font-weight-bold">

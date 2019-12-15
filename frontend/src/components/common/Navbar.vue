@@ -2,12 +2,15 @@
   <v-card flat tile
   >
     <v-toolbar dense>
-      <div>
       <v-toolbar-title
       class="nav__title"
+      >
+      <router-link
       to="/"
-      >AItter -ついじぇね-</v-toolbar-title>
-      </div>
+      class="toolbar-title"
+      >
+      AItter -ついじぇね-
+      </router-link></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-app-bar-nav-icon
       color="black"
@@ -90,5 +93,10 @@ export default {
 <style>
 .nav__title {
   color: #FF6F00;
+}
+
+.toolbar-title {
+  color: #FF6F00 !important;
+  text-decoration: inherit;
 }
 </style>
