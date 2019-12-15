@@ -6,15 +6,17 @@
      v-if="generatedTweet"
      class="mx-auto"
      color="#FFFFFF"
-
      width="100%"
      >
-     <v-card-title class="title__displayname">
-       <span class="font-weight-light">
+     <v-card-title
+     class="amber darken-4 title__displayname"
+     dark
+     >
+       <span class="font-weight">
          {{ userinfo.displayName }} bot のツイート
        </span>
      </v-card-title>
-     <v-card-text class="headline font-weight-bold">
+     <v-card-text class="headline font-weight-bold text__description">
         {{ generatedTweet }}
      </v-card-text>
      <v-card-actions>
@@ -174,7 +176,7 @@ export default {
 
 .index__description {
   /* font-size: small; */
-  padding: 10px;
+  /* padding: 10px; */
 }
 
 .twitter__displayname {
@@ -183,5 +185,10 @@ export default {
 
 .title__displayname {
   font-size: 1rem;
+  color: #ffffff;
+}
+
+.text__description {
+  padding-top: 16px !important;
 }
 </style>
