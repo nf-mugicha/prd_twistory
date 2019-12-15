@@ -7,7 +7,7 @@
     <v-row
     justify="center"
     no-gutters
-    class="orange lighten-4 py-4 text-center grey--text"
+    class="amber lighten-5 py-4 text-center grey--text"
     >
     <v-btn
     v-for="link in links"
@@ -29,7 +29,7 @@
       <Login />
     </v-btn>
     <v-col
-    class="orange lighten-4 py-4 text-center grey--text"
+    class="amber lighten-5 py-4 text-center grey--text"
     cols="12"
     >
     {{ new Date().getFullYear() }} -- <strong>Aitter - ついじぇね - </strong>

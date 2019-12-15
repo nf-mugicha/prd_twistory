@@ -38,7 +38,7 @@
          >
          <v-btn class="light-blue darken-1 text-center white--text">
            <font-awesome-icon :icon="['fab', 'twitter']"></font-awesome-icon>
-           ツイートする
+           結果をツイートする
          <!-- <span class="subheading">45</span> -->
          </v-btn>
          </v-row>
