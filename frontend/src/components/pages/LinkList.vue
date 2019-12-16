@@ -130,8 +130,8 @@ export default {
         .then((res) => {
           console.log(res)
           console.log(res.data)
-          this.generatedTweet = res.data
           this.processing = false
+          alert('ツイートしました！')
         })
         .catch(error => {
           console.log(error)

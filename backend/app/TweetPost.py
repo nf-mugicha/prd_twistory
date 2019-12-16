@@ -37,15 +37,14 @@ class TweetPost(object):
         """
         url = "https://api.twitter.com/1.1/statuses/update.json"
         generated_text = self.generated_text
-        params = {'status': generated_text + str('ふにゃふにゃ')}
+        params = {'status': generated_text + str(' ')}
         req = twitter_oath.post(url, params)
 
         if req.status_code == 200:
             self.logger.info('tweet success')
-            self.logger.info(req.text)
         else:
             self.logger.error('tweet faild')
-            self.logger.info(req.text)
+            self.logger.error(req.text)
 
 
 if __name__ == '__main__':

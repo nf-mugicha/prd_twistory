@@ -53,6 +53,8 @@ def tweet_post():
         )
         tweet_post.tweet_posting(twitter_oath)
 
+        return 'ツイートしました'
+
 
 @app.route('/generate', methods=["POST"])
 def tweet_generate():
