@@ -136,7 +136,7 @@ export default {
         .catch(error => {
           console.log(error)
           this.processing = false
-          this.generatedTweet = 'ツイート生成に失敗しました。もう一度試してみてください'
+          this.generatedTweet = 'ツイートに失敗しました。もう一度試してみてください'
         })
     },
     TweetGenerate (btn) {
