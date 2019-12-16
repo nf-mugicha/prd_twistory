@@ -1,7 +1,7 @@
 import json
 from requests_oauthlib import OAuth1Session
 
-from settings import twitter_api
+from .settings import twitter_api
 
 
 class TweetPost(object):
@@ -21,12 +21,12 @@ class TweetPost(object):
         self.generated_text = generated_text
         self.logger = logger
 
-    def create_oath_session(self):
+    def create_oath_session(self, access_token, secret_token):
         twitter_oath = OAuth1Session(
             twitter_api.CONSUMER_KEY,
             twitter_api.CONSUMER_SECRET_KEY,
-            twitter_api.ACCESS_TOKEN,
-            twitter_api.ACCESS_TOKEN_SECRET
+            access_token,
+            secret_token
         )
 
         return twitter_oath
@@ -37,7 +37,7 @@ class TweetPost(object):
         """
         url = "https://api.twitter.com/1.1/statuses/update.json"
         generated_text = self.generated_text
-        params = {'status': generated_text + str(' ああああ')}
+        params = {'status': generated_text + str('ふにゃふにゃ')}
         req = twitter_oath.post(url, params)
 
         if req.status_code == 200:

@@ -37,6 +37,10 @@ const actions = {
       .then((userCredential) => {
         // ユーザー情報を取り出す
         const userInfo = userCredential.additionalUserInfo.profile
+        const userToken = userCredential.credential.accessToken
+        const userSecretToken = userCredential.credential.secret
+        console.log(userToken)
+        console.log(userSecretToken)
         // firestoreに送る
         TwitterUsersInfo.doc(userInfo.id_str).get()
           .then(function (docs) {
@@ -49,6 +53,8 @@ const actions = {
               console.log('regist user')
               TwitterUsersInfo.doc(userInfo.id_str).set({
                 userInfo,
+                'userAccessToken': userToken,
+                'userSecretToken': userSecretToken,
                 'timestamp': firebase.firestore.FieldValue.serverTimestamp()
               }, { merge: true })
                 .then(doc => {
@@ -67,6 +73,8 @@ const actions = {
                   userInfo.profile_banner_url = null
                 }
                 const payload = {
+                  'accessToken': userToken,
+                  'secretToken': userSecretToken,
                   'displayName': user.displayName,
                   'photoURL': user.photoURL,
                   'backgroundPhoto': userInfo.profile_banner_url,

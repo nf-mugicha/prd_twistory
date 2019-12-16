@@ -38,7 +38,12 @@
          align="center"
          justify="end"
          >
-         <v-btn class="light-blue darken-1 text-center white--text">
+         <v-btn
+         class="light-blue darken-1 text-center white--text"
+         @click.prevent="PostingTweet"
+         :disabled="processing"
+         :loading="processing"
+         >
            <font-awesome-icon :icon="['fab', 'twitter']"></font-awesome-icon>
            結果をツイートする
          <!-- <span class="subheading">45</span> -->
@@ -107,6 +112,33 @@ export default {
   //   }, 2000)
   // },
   methods: {
+    PostingTweet (btn) {
+      if (this.processing) return
+      this.processing = true
+      const userinfo = this.$store.getters['auth/user']
+      // POST送信する
+      axios.post(
+        'http://127.0.0.1:5000/tweet',
+        {
+          account: this.screen_name,
+          generated_text: this.generatedTweet,
+          accessToken: userinfo.accessToken,
+          secretToken: userinfo.secretToken
+        }
+      )
+      // 送信完了
+        .then((res) => {
+          console.log(res)
+          console.log(res.data)
+          this.generatedTweet = res.data
+          this.processing = false
+        })
+        .catch(error => {
+          console.log(error)
+          this.processing = false
+          this.generatedTweet = 'ツイート生成に失敗しました。もう一度試してみてください'
+        })
+    },
     TweetGenerate (btn) {
       if (this.processing) return
       this.processing = true
