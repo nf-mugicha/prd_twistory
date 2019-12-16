@@ -1,7 +1,9 @@
 <template>
   <div class="index__conteiner text-center">
     <h1>自分botを作ってみよう！</h1>
-    <h3 class="index__description">Aitter -ついじぇね- は、機械学習を使って「あなたっぽい」ツイートを自動生成するサービスです</h3>
+    <h3 class="index__description">
+      Aitter -ついじぇね- は、「あなたっぽい」ツイートを自動生成するサービスです。<br>ツイートすればするほどそれっぽくなります。
+      </h3>
     <link-list
     v-if="isLogin"
     :screen_name="userinfo.screenName"

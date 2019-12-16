@@ -23,6 +23,7 @@ import pickle
 import csv
 import traceback
 import time
+from requests_oauthlib import OAuth1Session
 
 app = vue_app()
 logger = logging_setting('TweetGeneratorLogging')
@@ -33,7 +34,12 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/generate', methods=["GET", "POST"])
+@app.route('/tweet', methods=["POST"])
+def tweet_post():
+    logger.info('post generated tweet: {}'.format())
+
+
+@app.route('/generate', methods=["POST"])
 def tweet_generate():
     start = time.time()
     logger.info('start generate tweet')

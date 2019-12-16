@@ -22,11 +22,9 @@ from .functions.preprocess import clean_tweet_text
 from .functions.PrepareChain import PrepareChain
 from .functions.GenerateText import GenerateText
 
-# from settings.logging import logging_setting
-
-# import settings.twitter_api as twitter_api
 from .settings.certification import api
 
+# from settings.logging import logging_setting
 # logger = logging_setting('TweetGeneratorLogging')
 
 
