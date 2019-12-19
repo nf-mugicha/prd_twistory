@@ -16,10 +16,6 @@
     v-else @click="signIn">Twitter Login
   </v-btn>
   </div>
-  <!-- <div class="login__auth">
-    <span dark color="#2196F3" v-if="isLogin" @click="signOut">Sign-Out</span>
-    <span dark color="#2196F3" v-else @click="signIn">Twitter Login</span>
-  </div> -->
 </template>
 
 <script>
@@ -81,9 +77,6 @@ export default {
         this.processing = true
         this.$store.dispatch('auth/login')
         setTimeout(() => {
-          // const userlogin = this.$store.getters['auth/user']
-          // console.log(userlogin)
-          // this.$router.push({ name: 'LinkList', params: { screen_name: userlogin.screenName } })
           this.processing = false
         }, 10000)
         // this.processing = false

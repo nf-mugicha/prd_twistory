@@ -19,15 +19,6 @@ const routes = [{
   path: '/',
   component: Index
 },
-  // {
-  //     path: '/u/:screen_name',
-  //     name: 'LinkList',
-  //     component: LinkList,
-  //     props: true,
-  //     meta: {
-  //         title: 'screen_name'
-  //     }
-  // },
 {
   path: '/404',
   component: NotFound

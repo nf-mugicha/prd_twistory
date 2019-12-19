@@ -27,13 +27,6 @@
          :src="userinfo.photoURL"
          ></v-img>
          </v-list-item-avatar>
-         <!-- <v-list-item-content
-         class="twitter__displayname"
-         > -->
-           <!-- <v-list-item-title>
-             {{ userinfo.displayName }}
-           </v-list-item-title>
-         </v-list-item-content> -->
          <v-row
          align="center"
          justify="end"
@@ -46,7 +39,6 @@
          >
            <font-awesome-icon :icon="['fab', 'twitter']"></font-awesome-icon>
            結果をツイートする
-         <!-- <span class="subheading">45</span> -->
          </v-btn>
          </v-row>
        </v-list-item>
@@ -65,10 +57,6 @@
 </template>
 
 <script>
-import LinkPhoto from '../LinkPhoto'
-import OneLink from '../OneLink'
-import LinkListCard from '../LinkListCard'
-import LinkListForm from '../LinkListForm'
 import UserProfile from '../UserProfile'
 import axios from 'axios'
 import NotFound from '../pages/NotFound'
@@ -76,10 +64,6 @@ import NotFound from '../pages/NotFound'
 export default {
   name: 'LinkList',
   components: {
-    'link-photo': LinkPhoto,
-    'one-link': OneLink,
-    'link-list-card': LinkListCard,
-    'link-list-form': LinkListForm,
     'user-profile': UserProfile,
     'not-found': NotFound
   },
@@ -99,18 +83,9 @@ export default {
   // pathの:idを直接書き換えた時の対応
   beforeRouteUpdate (to, from, next) {
     // 動的セグメントが変わった場合は、コールバック関数でtargetIdを更新する
-    console.log('URL書き換え')
-    console.log(to.params)
     this.screen_name = to.params.screen_name
-    // this.$route.replace('/404')
     next()
-    // this.isTrueURL()
   },
-  // mounted () {
-  //   setTimeout(() => {
-  //     this.isTrueURL()
-  //   }, 2000)
-  // },
   methods: {
     PostingTweet (btn) {
       if (this.processing) return
@@ -128,8 +103,6 @@ export default {
       )
       // 送信完了
         .then((res) => {
-          console.log(res)
-          console.log(res.data)
           this.processing = false
           alert('ツイートしました！')
         })
@@ -151,8 +124,6 @@ export default {
       )
       // 送信完了
         .then((res) => {
-          console.log(res)
-          console.log(res.data)
           this.generatedTweet = res.data
           this.processing = false
         })
@@ -163,26 +134,18 @@ export default {
         })
     },
     isTrueURL () {
-      console.log('ページが正しいか判定')
       const userurl = this.$store.getters['auth/user']
       if (userurl) {
-        console.log('ログインしてる')
         if (userurl.screenName === this.$route.params.screen_name) {
-          console.log('正しいURL')
-          console.log(userurl.screenName)
           this.NotFound = false
         } else {
-          console.log('正しくないURL')
           this.NotFound = true
         }
       } else {
-        console.log('インデックスに飛ばす')
         this.$router.push('/')
       }
     }
   },
-  // computedには結果がキャッシュされる
-  // getterには引数は渡せない
   // ゲッター
   computed: {
     isLogin () {

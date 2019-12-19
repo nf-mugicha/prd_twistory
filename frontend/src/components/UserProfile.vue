@@ -17,9 +17,6 @@ height="100px"
 src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
 >
 </v-img>
-<!-- <router-link
-v-bind:to="{name: 'LinkList', params: {screen_name: userinfo.screenName}}"
-> -->
 <router-link
 to="/"
 >
@@ -51,38 +48,16 @@ alt="profile"
 <script>
 export default {
   name: 'UserProfile',
-  // props: {
-  //   'user_profile': {
-  //     type: String,
-  //     required: true
-  //   }
-  // },
-  // mounted () {
-  //   this.userProfile()
-  // },
-  // methods: {
-  //   userProfile () {
-  //     console.log(this.user_profile)
-  //     this.$store.dispatch('user/userData', {screen_name: this.user_profile})
-  //   }
-  // },
   computed: {
     userinfo () {
       return this.$store.getters['auth/user']
     }
-    // userdata () {
-    //   return this.$store.getters['user/userProfile']
-    // }
   }
 }
 </script>
 
 <style>
 /* プロフィール */
-.prof {
-    /* padding-top: 20px;
-    padding-bottom: 20px; */
-}
 .prof .icatch{
     margin:0;
 }

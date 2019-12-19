@@ -21,16 +21,12 @@ const getters = {
 
 const mutations = {
   setUser (state, user) {
-    console.log('setUser')
-    console.log(user)
     state.user = user
-    // console.log(state.user)
   }
 }
 
 const actions = {
   async login (context) {
-    console.log('user login now')
     // twitterログイン
     const provider = new firebase.auth.TwitterAuthProvider()
     await firebase.auth().signInWithPopup(provider)
@@ -39,18 +35,11 @@ const actions = {
         const userInfo = userCredential.additionalUserInfo.profile
         const userToken = userCredential.credential.accessToken
         const userSecretToken = userCredential.credential.secret
-        console.log(userToken)
-        console.log(userSecretToken)
         // firestoreに送る
         TwitterUsersInfo.doc(userInfo.id_str).get()
           .then(function (docs) {
-            console.log(docs)
             // 新規ユーザーだったらDBに登録
-            if (docs.exists) {
-              console.log('user exist')
-              console.log(userInfo)
-            } else {
-              console.log('regist user')
+            if (docs.exists) {} else {
               TwitterUsersInfo.doc(userInfo.id_str).set({
                 userInfo,
                 'userAccessToken': userToken,
@@ -64,11 +53,7 @@ const actions = {
             // currentUserテーブルに登録
             firebase.auth().onAuthStateChanged(function (user) {
               if (user) {
-                console.log(user)
-                // console.log(this.userInfo)
-                console.log(userInfo)
                 // firestoreに送る
-                console.log('regist current users table')
                 if (!userInfo.profile_banner_url) {
                   userInfo.profile_banner_url = null
                 }
@@ -101,24 +86,16 @@ const actions = {
       })
   },
   async logout (context) {
-    console.log('logout')
     await firebase.auth().signOut()
     context.commit('setUser', null)
   },
   currentUser (context, user) {
-    console.log('currentUser')
-    console.log(user)
     // ログインしていたら、認証情報からDBを引く
     if (!user) {
       context.commit('setUser', null)
     } else {
-      console.log(user.uid)
       const currentUser = currentUserInfo.doc(user.uid)
-      console.log(currentUser)
-      console.log(typeof currentUser)
-      console.log(currentUser.get())
       currentUser.get().then(function (doc) {
-        console.log(doc.data())
         // ステート更新
         context.commit('setUser', doc.data())
       })

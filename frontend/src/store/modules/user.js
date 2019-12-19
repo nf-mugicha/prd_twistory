@@ -17,20 +17,14 @@ const getters = {
 
 const mutations = {
   setUser (state, user) {
-    console.log('setUser')
-    console.log(user)
     state.user = user
   }
 }
 
 const actions = {
   userData (context, screenName) {
-    console.log(screenName)
-    console.log(currentUserInfo.where('screenName', '==', screenName).get())
     currentUserInfo.where('screenName', '==', screenName.screen_name).get().then((querySnapshot) => {
       querySnapshot.forEach((doc) => {
-        console.log(doc.id)
-        console.log(doc.data())
         context.commit('setUser', doc.data())
       })
     })

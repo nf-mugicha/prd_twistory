@@ -35,7 +35,6 @@ Vue.config.productionTip = false
 let createApp = (callback) => {
   firebase.auth().onAuthStateChanged(user => {
     if (user) {
-      console.log(user)
       store.dispatch('auth/currentUser', user)
     } else {
       store.dispatch('auth/currentUser', null)
