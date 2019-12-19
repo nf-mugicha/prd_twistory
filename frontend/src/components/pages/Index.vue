@@ -3,6 +3,7 @@
     <h1>自分botを作ってみよう！</h1>
     <h3 class="index__description">
       Aitter -ついじぇね- は、「あなたっぽい」ツイートを自動生成するサービスです。<br>ツイートすればするほどそれっぽくなります。
+      <p class="index__attention">初めてのツイート生成は時間が掛かります！気長にお待ち下さい・・</p>
       </h3>
     <link-list
     v-if="isLogin"
@@ -55,5 +56,9 @@ a {
 }
 .index__conteiner {
   margin: auto;
+}
+.index__attention {
+  color:red;
+  font-weight: bold;
 }
 </style>
