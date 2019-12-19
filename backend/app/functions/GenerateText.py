@@ -51,8 +51,8 @@ class GenerateText(object):
         while True:
             text = self._generate_sentence(text_3grams_list)
             # 生成したテキストが30文字以上だったらやり直し
-            if len(text) < 10 or len(text) > 45:
-                self.logger.info("not output for 10 < text < 45")
+            if len(text) < 15 or len(text) > 45:
+                self.logger.info("not output for 15 < text < 45")
                 self.logger.info("text length: {}".format(len(text)))
                 self.logger.info(text)
                 continue

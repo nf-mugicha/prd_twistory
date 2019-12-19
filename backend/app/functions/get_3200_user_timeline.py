@@ -3,8 +3,12 @@
 twitter-pythonライブラリを用いる。
 取得したツイートはTwitter.Status型のリストをpklファイルに保存する
 """
-from ..settings.certification import api
-# import settings.twitter_api as twitter_api
+try:
+    from ..settings.certification import api
+    from .connect_firestorage import upload_bucket_file
+except:
+    from settings.certification import api
+    from .connect_firestorage import upload_bucket_file
 import pickle
 import os
 import shutil
@@ -66,6 +70,8 @@ def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
     with open(user_timeline_3200_raw,
               "wb") as f:
         pickle.dump(all_tweets, f)
+        # fireストレージにアップロード
+        upload_bucket_file(user_timeline_3200_raw, logger)
         logger.info("save raw data of 3200 tweets: {}".format(
             user_timeline_3200_raw))
     return all_tweets, latest_id, max_id

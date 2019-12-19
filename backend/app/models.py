@@ -7,25 +7,40 @@
 from flask import Flask
 from flask_cors import CORS
 import os
-import shutil
 import pickle
 import csv
 import traceback
 import time
+import shutil
 
-from .functions.get_3200_user_timeline import get_3200_user_timeline
-from .functions.get_all_user_timeline import get_all_user_timeline
-from .functions.save_tsv_3200_tweets import save_tsv_3200_tweets
-from .functions.save_tsv_all_tweets import save_tsv_all_tweets
-from .functions.preprocess import clean_tweet_text
+try:
+    from .functions.get_3200_user_timeline import get_3200_user_timeline
+    from .functions.get_all_user_timeline import get_all_user_timeline
+    from .functions.save_tsv_3200_tweets import save_tsv_3200_tweets
+    from .functions.save_tsv_all_tweets import save_tsv_all_tweets
+    from .functions.preprocess import clean_tweet_text
 
-from .functions.PrepareChain import PrepareChain
-from .functions.GenerateText import GenerateText
+    from .functions.PrepareChain import PrepareChain
+    from .functions.GenerateText import GenerateText
 
-from .settings.certification import api
+    from .functions.connect_firestorage import upload_bucket_file, download_bucket_file
 
-# from settings.logging import logging_setting
-# logger = logging_setting('TweetGeneratorLogging')
+    from .settings.certification import api
+    # from .settings.firebase import bucket
+except:
+    from functions.get_3200_user_timeline import get_3200_user_timeline
+    from functions.get_all_user_timeline import get_all_user_timeline
+    from functions.save_tsv_3200_tweets import save_tsv_3200_tweets
+    from functions.save_tsv_all_tweets import save_tsv_all_tweets
+    from functions.preprocess import clean_tweet_text
+
+    from functions.PrepareChain import PrepareChain
+    from functions.GenerateText import GenerateText
+
+    from functions.connect_firestorage import upload_bucket_file, download_bucket_file
+
+    from settings.certification import api
+    # from settings.firebase import bucket
 
 
 def vue_app(app_name="VUE-FLASK"):
@@ -189,6 +204,8 @@ class TweetsGenerater(object):
                         tweet_excerpt["image_{}".format(i)] = m.media_url_https
                 # ファイル出力
                 writecsv.writerow(tweet_excerpt)
+                # fireストレージにアップロード
+                upload_bucket_file(bucket, filename_3200)
                 # 辞書を初期化
                 tweet_excerpt = {}
             # logger.info("writing count: {0}".format(c))
@@ -198,6 +215,9 @@ class TweetsGenerater(object):
         return all_tweets, latest_id
 
     def get_tweet(self):
+        # ストレージからダウンロード
+        download_bucket_file(self.user_timeline_3200_raw, self.logger)
+        download_bucket_file(self.filename_3200, self.logger)
         # 既に3200件のデータを取り終えていたらやらない
         if not os.path.exists(self.user_timeline_3200_raw):
             # 3200件のツイートデータ取得・保存
@@ -297,17 +317,21 @@ class TweetsGenerater(object):
         generator = GenerateText(self.logger)
         result_text = generator.generate_from_tsv(self.triplet_freqs_tsv)
         self.logger.info('finish generate tweets')
+        # ローカルのファイルを削除
+        shutil.rmtree(self.filepath)
 
         return result_text
 
 
 if __name__ == '__main__':
+    from settings.logging import logging_setting
+    logger = logging_setting('TweetGeneratorModelTextLogging')
     start = time.time()
     logger.info('start generate tweet')
     try:
-        account = ""
+        account = "Ann_NH"
         logger.info('account name: {}'.format(account))
-        tweets_generater = TweetsGenerater(account)
+        tweets_generater = TweetsGenerater(account, logger)
         # 最新の3200ツイートを取得
         latest_id, account, filename_3200 = tweets_generater.get_tweet()
         # 今保存されているものより新しいツイートを取得し、tsvファイルに上書きする

@@ -12,6 +12,7 @@ import sqlite3
 from collections import defaultdict
 import csv
 import os
+from .connect_firestorage import upload_bucket_file
 
 
 class PrepareChain(object):
@@ -165,6 +166,8 @@ class PrepareChain(object):
                 writecsv.writerow(tweet_excerpt)
                 # 辞書を初期化
                 tweet_excerpt = {}
+        # fireストレージにアップロード
+        upload_bucket_file(file_triplet_freqs, self.logger)
 
     def show(self, triplet_freqs):
         """

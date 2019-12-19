@@ -11,6 +11,7 @@
 """
 import csv
 from .preprocess import clean_tweet_text
+from .connect_firestorage import upload_bucket_file
 
 
 def save_tsv_3200_tweets(all_tweets, filename_3200, logger):
@@ -51,6 +52,8 @@ def save_tsv_3200_tweets(all_tweets, filename_3200, logger):
             tweet_id.append(int(tweet.id))
             # 辞書を初期化
             tweet_excerpt = {}
+    # fireストレージにアップロード
+    upload_bucket_file(filename_3200, logger)
     max_id = min(tweet_id)
     latest_id = max(tweet_id)
     # 3200ツイート分のリストと、最後のmax_idを返す

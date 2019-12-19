@@ -25,6 +25,7 @@ import pickle
 import csv
 import traceback
 import time
+import shutil
 from requests_oauthlib import OAuth1Session
 
 app = vue_app()
@@ -61,9 +62,10 @@ def tweet_generate():
     start = time.time()
     logger.info('start generate tweet')
     try:
+        logger.info(request)
         account_info = request.json
+        logger.info('POST data: {}'.format(account_info))
         if type(account_info) == dict:
-            logger.info('POST data: {}'.format(account_info))
             account = account_info['account']
         else:
             account = ""
@@ -78,6 +80,7 @@ def tweet_generate():
         # ツイート生成
         result_text = tweets_generater.generate_tweets()
         elapsed_time = time.time() - start
+        # ローカルファイルを消す
         logger.info('finish time: {} [sec.]'.format(elapsed_time))
         return result_text
     except:

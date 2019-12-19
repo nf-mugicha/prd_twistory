@@ -128,3 +128,5 @@ firestore.indexes.json
 firestore.rules
 functions/
 storage.rules
+backend/app/settings/aitter-twigene-firebase-adminsdk-9v9yl-689e5e3f3b.json
+*__pycache__
