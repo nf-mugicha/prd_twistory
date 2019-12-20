@@ -9,8 +9,8 @@ WORKDIR /var/www/
 COPY requirements.txt ./
 
 # 依存Pythonライブラリインストール
-# RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+# RUN pip install -r requirements.txt
 
 
 CMD ["uwsgi","--ini","/var/www/uwsgi.ini"]
