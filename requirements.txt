@@ -9,3 +9,4 @@ Flask-Cors==3.0.8
 mecab-python3==0.996.2
 seaborn==0.9.0
 python-twitter==3.5
+uwsgi

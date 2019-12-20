@@ -204,11 +204,11 @@ class TweetsGenerater(object):
                         tweet_excerpt["image_{}".format(i)] = m.media_url_https
                 # ファイル出力
                 writecsv.writerow(tweet_excerpt)
-                # fireストレージにアップロード
-                upload_bucket_file(bucket, filename_3200)
                 # 辞書を初期化
                 tweet_excerpt = {}
             # logger.info("writing count: {0}".format(c))
+            # fireストレージにアップロード
+            upload_bucket_file(filename_3200, self.logger)
             latest_id = all_tweets[0].id-1
             self.logger.info("{0} new tweets, latest id: {1}".format(
                 len(all_tweets), all_tweets[0].id))

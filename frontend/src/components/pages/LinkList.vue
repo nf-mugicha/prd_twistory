@@ -93,7 +93,7 @@ export default {
       const userinfo = this.$store.getters['auth/user']
       // POST送信する
       axios.post(
-        'http://127.0.0.1:5000/tweet',
+        'http://127.0.0.1:4231/tweet',
         {
           account: this.screen_name,
           generated_text: this.generatedTweet,
@@ -117,7 +117,7 @@ export default {
       this.processing = true
       // POST送信する
       axios.post(
-        'http://127.0.0.1:5000/generate',
+        'http://127.0.0.1:4231/generate',
         {
           account: this.screen_name
         }
