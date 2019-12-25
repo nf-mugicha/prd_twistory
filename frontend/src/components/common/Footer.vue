@@ -21,6 +21,15 @@
     {{ link.name }}
     </v-btn>
     <v-btn
+    color="grey"
+    text
+    rounded
+    class="footer__col1"
+    href="http://twitter.com/aitter_twigene"
+    >
+    公式Twitter
+    </v-btn>
+    <v-btn
     color="white"
     text
     rounded
