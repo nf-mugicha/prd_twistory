@@ -104,6 +104,7 @@ export default {
       // 送信完了
         .then((res) => {
           this.processing = false
+          console.log(res)
           alert(res.data)
         })
         .catch(error => {
