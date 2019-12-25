@@ -43,8 +43,8 @@ class TweetPost(object):
 
         if req.status_code == 200:
             self.logger.info('tweet success')
-            self.logger.info("{ 'account': {0}, 'generated_tweet: {1}' }".format(
-                self.account, self.generated_text))
+            self.logger.info(
+                '{ "account": {0}, "generated_tweet": {1}'.format(self.account, self.generated_text))
             return 'ツイートしました！'
         else:
             self.logger.error('tweet faild')
