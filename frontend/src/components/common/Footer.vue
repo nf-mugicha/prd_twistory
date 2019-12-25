@@ -25,9 +25,18 @@
     text
     rounded
     class="footer__col1"
-    href="http://twitter.com/aitter_twigene"
+    href="https://twitter.com/twigene_aitter"
     >
     公式Twitter
+    </v-btn>
+    <v-btn
+    color="grey"
+    text
+    rounded
+    class="footer__col1"
+    href="https://forms.gle/euY2WbdRziXjFSUk9"
+    >
+    お問い合わせ
     </v-btn>
     <v-btn
     color="white"
@@ -65,8 +74,7 @@ export default {
     links: [
       { name: 'Home', path: '/', component: Index },
       { name: 'プライバシーポリシー', path: '/privacy-policy', component: PrivacyPlicy },
-      { name: '利用規約', path: '/service', component: TermsOfService },
-      { name: 'お問い合わせ', path: '/', component: Index }
+      { name: '利用規約', path: '/service', component: TermsOfService }
     ]
   }),
   computed: {
