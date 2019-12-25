@@ -54,6 +54,7 @@ def tweet_post():
             access_token, secret_token
         )
         response_message = tweet_post.tweet_posting(twitter_oath)
+        logger.info('Tweet message: {}'.format(response_message))
 
         return response_message
 
