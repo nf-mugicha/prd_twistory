@@ -34,7 +34,7 @@ logger = logging_setting('TweetGeneratorLogging')
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return 'hello world!!'
 
 
 @app.route('/tweet', methods=["POST"])
@@ -93,3 +93,4 @@ def tweet_generate():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+    logger.info('run.py is running')
