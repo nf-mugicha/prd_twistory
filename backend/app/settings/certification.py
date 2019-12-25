@@ -2,9 +2,9 @@ from . import twitter_api
 import pandas as pd
 import tweepy
 import csv
-import seaborn as sns
+# import seaborn as sns
 import twitter
-sns.set(style="whitegrid")
+# sns.set(style="whitegrid")
 
 # twitter認証情報
 key = twitter_api.CONSUMER_KEY

@@ -7,7 +7,7 @@ try:
     from ..settings.certification import api
     from .connect_firestorage import upload_bucket_file
 except:
-    from settings.certification import api
+    from ..settings.certification import api
     from .connect_firestorage import upload_bucket_file
 import pickle
 import os

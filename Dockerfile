@@ -1,7 +1,9 @@
 # ベースイメージ
 FROM python:3.7
 
+# RUN apt-get -y install sudo
 RUN mkdir -p /var/www/
+
 # workdirの指定
 WORKDIR /var/www/
 

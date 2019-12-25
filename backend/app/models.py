@@ -72,7 +72,7 @@ class TweetsGenerater(object):
         self.filepath = "get_tweets_assets/{0}".format(account)
         # ユーザーごとにフォルダを分ける
         if not os.path.exists(self.filepath):
-            os.mkdir(self.filepath)
+            os.makedirs(self.filepath)
         # 取得したツイートツイート保存先
         self.filename_3200 = "{0}/tweets_3200_{1}.tsv".format(
             self.filepath, account)
