@@ -104,12 +104,12 @@ export default {
       // 送信完了
         .then((res) => {
           this.processing = false
-          alert('ツイートしました！')
+          alert(res.data)
         })
         .catch(error => {
           console.log(error)
           this.processing = false
-          this.generatedTweet = 'ツイートに失敗しました。もう一度試してみてください'
+          alert('ツイートに失敗しました。もう一度試してみてください')
         })
     },
     TweetGenerate (btn) {
