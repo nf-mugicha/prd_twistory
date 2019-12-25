@@ -39,9 +39,10 @@ def index():
 
 @app.route('/tweet', methods=["POST"])
 def tweet_post():
+    logger.info('start tweet posting')
     account_info = request.json
+    logger.info('tweet data: {}'.format(account_info))
     if type(account_info) == dict:
-        logger.info('tweet data: {}'.format(account_info))
         account = account_info['account']
         generated_text = account_info['generated_text']
         access_token = account_info['accessToken']
@@ -52,9 +53,9 @@ def tweet_post():
         twitter_oath = tweet_post.create_oath_session(
             access_token, secret_token
         )
-        tweet_post.tweet_posting(twitter_oath)
+        response_message = tweet_post.tweet_posting(twitter_oath)
 
-        return 'ツイートしました'
+        return response_message
 
 
 @app.route('/generate', methods=["POST"])

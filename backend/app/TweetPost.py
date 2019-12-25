@@ -45,9 +45,11 @@ class TweetPost(object):
             self.logger.info('tweet success')
             self.logger.info("{ 'account': {0}, 'generated_tweet: {1}' }".format(
                 self.account, self.generated_text))
+            return 'ツイートしました！'
         else:
             self.logger.error('tweet faild')
             self.logger.error(req.text)
+            return 'ツイート失敗しました'
 
 
 if __name__ == '__main__':
