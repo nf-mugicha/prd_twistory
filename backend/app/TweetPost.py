@@ -53,7 +53,7 @@ class TweetPost(object):
             self.logger.info('tweet success')
             try:
                 slack = slackweb.Slack(
-                    url="https://hooks.slack.com/services/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")
+                    url="https://hooks.slack.com/services/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")
                 slack.notify(text=generated_text, username=self.account)
                 return 'ツイートしました！'
             except:
