@@ -41,7 +41,7 @@ class TweetPost(object):
         # params = {'status': generated_text +
         #           str('\n #ついじぇね\n') + str(self.display_name) + " ボットがツイートしました" + str('\n https://aitter-twigene.me')}
         params = {'status': generated_text +
-                  str('\n\n #ついじぇね #') + str(self.display_name) + "ボットのツイート" + "\n\n自分っぽいツイートを自動生成してみよう！" + str('\n https://aitter-twigene.me')}
+                  str('\n\n #ついじぇね #') + str(self.display_name) + "ボットのツイート" + "\n自分っぽいツイートを自動生成してみよう！" + str('\n https://aitter-twigene.me')}
         req = twitter_oath.post(url, params)
 
         if req.status_code == 200:
