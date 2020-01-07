@@ -56,6 +56,7 @@ class TweetPost(object):
                 slack.notify(text=generated_text, username=self.account)
                 return 'ツイートしました！'
             except:
+                logger.error(traceback.format_exc())
                 return 'ツイートしました！'
         elif req.status_code == 403:
             return "ツイートが重複しています"
