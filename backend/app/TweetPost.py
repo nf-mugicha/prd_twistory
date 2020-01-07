@@ -1,5 +1,6 @@
 import json
 from requests_oauthlib import OAuth1Session
+import slackweb
 
 from .settings import twitter_api
 
@@ -49,7 +50,12 @@ class TweetPost(object):
         if req.status_code == 200:
             self.logger.info(req)
             self.logger.info('tweet success')
+            slack = slackweb.Slack(
+                url="https://hooks.slack.com/services/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")
+            slack.notify(text=req.text["text"], username=self.account)
             return 'ツイートしました！'
+        elif req.status_code == 187:
+            return "ツイートが重複しています"
         else:
             self.logger.error('tweet faild')
             self.logger.error(req.text)
