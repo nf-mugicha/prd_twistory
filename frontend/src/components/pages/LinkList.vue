@@ -98,7 +98,8 @@ export default {
           account: this.screen_name,
           generated_text: this.generatedTweet,
           accessToken: userinfo.accessToken,
-          secretToken: userinfo.secretToken
+          secretToken: userinfo.secretToken,
+          displayName: userinfo.displayName
         }
       )
       // 送信完了

@@ -47,8 +47,9 @@ def tweet_post():
         generated_text = account_info['generated_text']
         access_token = account_info['accessToken']
         secret_token = account_info['secretToken']
+        display_name = account_info['displayName']
         tweet_post = TweetPost(
-            account, generated_text, logger
+            account, generated_text, logger, display_name
         )
         twitter_oath = tweet_post.create_oath_session(
             access_token, secret_token

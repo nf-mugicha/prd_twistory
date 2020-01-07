@@ -10,7 +10,7 @@ class TweetPost(object):
     ツイートデータを画面から受け取り、ツイートする。
     """
 
-    def __init__(self, account, generated_text, logger):
+    def __init__(self, account, generated_text, logger, display_name):
         """
         params
             account: str アカウント名
@@ -20,6 +20,7 @@ class TweetPost(object):
         self.account = account
         self.generated_text = generated_text
         self.logger = logger
+        self.display_name = display_name
 
     def create_oath_session(self, access_token, secret_token):
         twitter_oath = OAuth1Session(
@@ -38,7 +39,7 @@ class TweetPost(object):
         url = "https://api.twitter.com/1.1/statuses/update.json"
         generated_text = self.generated_text
         params = {'status': generated_text +
-                  str('\n #ついじぇね\n') + str(self.account) + " ボットがツイートしました" + str('\n https://aitter-twigene.me')}
+                  str('\n #ついじぇね\n') + str(self.display_name) + " ボットがツイートしました" + str('\n https://aitter-twigene.me')}
         req = twitter_oath.post(url, params)
 
         if req.status_code == 200:
