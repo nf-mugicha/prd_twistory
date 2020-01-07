@@ -38,8 +38,10 @@ class TweetPost(object):
         """
         url = "https://api.twitter.com/1.1/statuses/update.json"
         generated_text = self.generated_text
+        # params = {'status': generated_text +
+        #           str('\n #ついじぇね\n') + str(self.display_name) + " ボットがツイートしました" + str('\n https://aitter-twigene.me')}
         params = {'status': generated_text +
-                  str('\n #ついじぇね\n') + str(self.display_name) + " ボットがツイートしました" + str('\n https://aitter-twigene.me')}
+                  str('\n #ついじぇね #') + str(self.display_name) + "ボットのツイート" + "\n自分っぽいツイートを自動生成してみよう！" + str('\n https://aitter-twigene.me')}
         req = twitter_oath.post(url, params)
 
         if req.status_code == 200:
