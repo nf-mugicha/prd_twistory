@@ -52,12 +52,12 @@ class TweetPost(object):
             self.logger.info('tweet success')
             try:
                 slack = slackweb.Slack(
-                    url="https://hooks.slack.com/services/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")
+                    url="https://hooks.slack.com/services/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")
                 slack.notify(text=generated_text, username=self.account)
                 return 'ツイートしました！'
             except:
-                logger.error("could not connect to slack")
-                logger.error(traceback.format_exc())
+                self.logger.error("could not connect to slack")
+                self.logger.error(traceback.format_exc())
                 return 'ツイートしました！'
         elif req.status_code == 403:
             return "ツイートが重複しています"
