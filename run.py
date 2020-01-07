@@ -40,23 +40,28 @@ def index():
 @app.route('/tweet', methods=["POST"])
 def tweet_post():
     logger.info('start tweet posting')
-    account_info = request.json
-    logger.info('tweet data: {}'.format(account_info))
-    if type(account_info) == dict:
-        account = account_info['account']
-        generated_text = account_info['generated_text']
-        access_token = account_info['accessToken']
-        secret_token = account_info['secretToken']
-        display_name = account_info['displayName']
-        tweet_post = TweetPost(
-            account, generated_text, logger, display_name
-        )
-        twitter_oath = tweet_post.create_oath_session(
-            access_token, secret_token
-        )
-        response_message = tweet_post.tweet_posting(twitter_oath)
-        logger.info('Tweet message: {}'.format(response_message))
+    try:
+        account_info = request.json
+        logger.info('tweet data: {}'.format(account_info))
+        if type(account_info) == dict:
+            account = account_info['account']
+            generated_text = account_info['generated_text']
+            access_token = account_info['accessToken']
+            secret_token = account_info['secretToken']
+            display_name = account_info['displayName']
+            tweet_post = TweetPost(
+                account, generated_text, logger, display_name
+            )
+            twitter_oath = tweet_post.create_oath_session(
+                access_token, secret_token
+            )
+            response_message = tweet_post.tweet_posting(twitter_oath)
+            logger.info('Tweet message: {}'.format(response_message))
 
+            return response_message
+    except:
+        logger.error(traceback.format_exc())
+        response_message = "ツイートに失敗しました"
         return response_message
 
 
