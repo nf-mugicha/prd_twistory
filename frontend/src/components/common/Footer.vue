@@ -1,5 +1,6 @@
 <template>
   <footer class="footer">
+    <!-- <AdSense></AdSense> -->
     <v-footer
     color="primary lighten-1"
     padless
@@ -62,6 +63,7 @@ import Login from './Login'
 import Index from '../pages/Index'
 import TermsOfService from '../pages/TermsOfService'
 import PrivacyPlicy from '../pages/PrivacyPolicy'
+// import Adsense from '../common/AdSense'
 export default {
   name: 'Footer',
   components: {

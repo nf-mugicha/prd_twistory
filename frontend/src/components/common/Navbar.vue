@@ -11,6 +11,10 @@
       >
       AItter -ついじぇね-
       </router-link></v-toolbar-title>
+      <img class="title__logo__img"
+        src="../../assets/twigene_logo.png"
+        alt="twigene"
+        >
       <v-spacer></v-spacer>
       <v-app-bar-nav-icon
       color="black"
@@ -86,10 +90,18 @@ export default {
 <style>
 .nav__title {
   color: #FF6F00;
+  font-weight: bold;
 }
 
 .toolbar-title {
   color: #FF6F00 !important;
   text-decoration: inherit;
+}
+.title__logo {
+  text-align: center;
+}
+.title__logo__img {
+    height: 47px;
+    width: 47px;
 }
 </style>

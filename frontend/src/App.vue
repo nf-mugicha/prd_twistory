@@ -2,6 +2,7 @@
   <v-app id="app">
     <Navbar />
     <v-content class="main__conteiner">
+      <!-- <AdSense></AdSense> -->
       <router-view></router-view>
     </v-content>
     <Footer />
@@ -12,6 +13,7 @@
 import Navbar from './components/common/Navbar'
 import Login from './components/common/Login'
 import Footer from './components/common/Footer'
+// import AdSense from './components/common/AdSense'
 
 export default {
   name: 'App',

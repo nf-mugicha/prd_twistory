@@ -1,27 +1,30 @@
 <template>
   <div class="index__conteiner text-center">
     <h1>自分botを作ってみよう！</h1>
-    <h3 class="index__description">
+    <h3 v-if="!isLogin" class="index__description">
       Aitter -ついじぇね- は、「あなたっぽい」ツイートを自動生成するサービスです。<br>ツイートすればするほどそれっぽくなります。
-      <p class="index__attention">初めてのツイート生成は時間が掛かります！気長にお待ち下さい・・</p>
       </h3>
+      <p class="index__attention">初めてのツイート生成は時間が掛かります。<br>バックグラウンドで動作するので、ブラウザを閉じても大丈夫です。２回目以降は時間かかりません</p>
     <link-list
     v-if="isLogin"
     :screen_name="userinfo.screenName"
     >
     </link-list>
       <login v-else />
+      <index-explain v-if="!isLogin" />
   </div>
 </template>
 
 <script>
 import Login from '../common/Login'
 import LinkList from '../pages/LinkList'
+import IndexExplain from '../IndexExplain'
 export default {
   name: 'Index',
   components: {
     'login': Login,
-    'link-list': LinkList
+    'link-list': LinkList,
+    'index-explain': IndexExplain
   },
   computed: {
     isLogin () {
@@ -35,9 +38,14 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h1, h2 {
-  font-weight: normal;
+<style>
+h1 {
+  font-weight: bold;
+  font-size: 24px;
+}
+h2 {
+  font-weight: bold;
+  font-size: 20px;
 }
 ul {
   list-style-type: none;
