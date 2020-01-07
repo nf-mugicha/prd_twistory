@@ -48,11 +48,10 @@ class TweetPost(object):
         req = twitter_oath.post(url, params)
 
         if req.status_code == 200:
-            self.logger.info(req)
             self.logger.info('tweet success')
             slack = slackweb.Slack(
                 url="https://hooks.slack.com/services/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")
-            slack.notify(text=req.text["text"], username=self.account)
+            slack.notify(text=generated_text, username=self.account)
             return 'ツイートしました！'
         elif req.status_code == 187:
             return "ツイートが重複しています"
