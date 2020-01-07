@@ -50,7 +50,7 @@ class TweetPost(object):
 
         if req.status_code == 200:
             self.logger.info('tweet success')
-            slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
+            slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
             slack.notify(text=generated_text, username=self.account)
             return 'ツイートしました！'
         elif req.status_code == 403:
