@@ -1,6 +1,7 @@
 import json
 from requests_oauthlib import OAuth1Session
 import slackweb
+import traceback
 
 from .settings import twitter_api
 
