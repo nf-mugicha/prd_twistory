@@ -44,15 +44,19 @@ class TweetPost(object):
         # params = {'status': generated_text +
         #           str('\n\n #ついじぇね #') + str(self.display_name) + "ボットのツイート" + "\n自分っぽいツイートを自動生成してみよう！" + str('\n https://aitter-twigene.me')}
         params = {'status': generated_text +
-                  str('\n\n #ついじぇね') +  str('\n https://aitter-twigene.me')}
+                  str('\n\n #ついじぇね') + str('\n https://aitter-twigene.me')}
         req = twitter_oath.post(url, params)
         self.logger.info(req)
 
         if req.status_code == 200:
             self.logger.info('tweet success')
-            slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
-            slack.notify(text=generated_text, username=self.account)
-            return 'ツイートしました！'
+            try:
+                slack = slackweb.Slack(
+                    url="https://hooks.slack.com/services/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")
+                slack.notify(text=generated_text, username=self.account)
+                return 'ツイートしました！'
+            except:
+                return 'ツイートしました！'
         elif req.status_code == 403:
             return "ツイートが重複しています"
         else:
