@@ -6,6 +6,8 @@ import logging
 from logging import getLogger, StreamHandler, Formatter, FileHandler
 from datetime import datetime
 import os
+
+from ..functions.connect_firestorage import upload_bucket_file
 """
 ログファイルを作成する関数
 logger_name: loggerオブジェクト名。実行ディレクトリと同じ階層にログ保存ディレクトリを作成する。
@@ -39,7 +41,7 @@ def logging_setting(logger_name):
     if os.path.exists(str(logger_name)) is not True:
         os.mkdir(str(logger_name))
     # テキスト出力先
-    timestamp = datetime.now().strftime("%Y-%m-%d")
+    timestamp = datetime.now().strftime("%Y-%m-%d:%H")
     # 保存する
     logging_file = '{0}/{1}_{2}.log'.format(
         str(logger_name), str(logger_name), timestamp)
@@ -55,7 +57,7 @@ def logging_setting(logger_name):
     # テキスト出力のhandlerをセット
     logger.addHandler(file_handler)
 
-    return logger
+    return logger, logging_file
 
 
 if __name__ == "__main__":

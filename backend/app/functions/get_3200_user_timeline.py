@@ -13,8 +13,10 @@ import pickle
 import os
 import shutil
 import time
+from timeout_decorator import timeout, TimeoutError
 
 
+# @timeout(30, use_signals=False)
 def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
     logger.info("start latests' 3200 tweets scraping")
     # 3200ツイートを入れる空のリストを用意
@@ -54,8 +56,10 @@ def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
     # 直近200ツイートを格納
     all_tweets.extend(latest_tweets)
     # 取得するツイートがなくなるまで続ける
-    logger.info("start 3200 tweets scraping")
+    logger.info("start 3200 tweets scraping: {}".format(len(latest_tweets)))
     c = 1
+    scraping_start_time = time.time()
+    # 200ツイート以上を取得
     while len(latest_tweets) > 0:
         logger.info("count {0} max_id: {1}".format(c, all_tweets[-1].id-1))
         latest_tweets = api.GetUserTimeline(
@@ -65,6 +69,13 @@ def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
         )
         all_tweets.extend(latest_tweets)
         c = c+1
+        # 時間を計測
+        scraping_end_time = time.time() - scraping_start_time
+        # 1分以上時間が掛かっていたら処理を抜ける
+        if scraping_end_time > 60:
+            logger.error('timeout error')
+            logger.error(len(all_tweets))
+            break
     max_id = all_tweets[-1].id-1
     # 取得した3200ツイート生データをファイル書き出ししておく
     with open(user_timeline_3200_raw,

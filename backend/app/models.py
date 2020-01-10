@@ -131,25 +131,30 @@ class TweetsGenerater(object):
             # since_idから遡った200件の、最も新しいid（200件以上新作があった時に使う）
             latest_id = int(all_tweets[0].id)
             max_id = int(all_tweets[-1].id)-1
-        elif len(latest_tweets) == 200:
+        # 200ツイート取得しているということは、最新ツイートが200ツイート以上ある可能性が高いので、更に取得する
+        elif len(latest_tweets) >= 200:
             # とりあえず全件格納する
             all_tweets.extend(latest_tweets)
-            # 200ツイート取得しているということは、最新ツイートが200ツイート以上ある可能性が高いので、更に取得する
             self.logger.info("start 200 more tweets scraping")
             c = 1
             since_id_flag = True
             while since_id_flag:
-                latest_id = int(all_tweets[-1].id)
+                # latest_id = int(all_tweets[-1].id)
                 try:
+                    scraping_start_time = time.time()
                     latest_tweets = api.GetUserTimeline(
                         screen_name=account,
                         count=200,
                         max_id=int(all_tweets[-1].id)-1
                     )
-                except TwitterError as te:
-                    self.logger.error('Twitter error {}'.format(te))
-                    self.logger.error(traceback.format_exc())
-                    break
+                    # 時間を計測
+                    scraping_end_time = time.time() - scraping_start_time
+                    # 1分以上時間が掛かっていたら処理を抜ける
+                    if scraping_end_time > 60:
+                        self.logger.error('timeout error')
+                        self.logger.error(len(all_tweets))
+                        since_id_flag = False
+                        break
                 except Exception as e:
                     self.logger.error('something wrong {}'.format(e))
                     self.logger.error(traceback.format_exc())

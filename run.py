@@ -16,8 +16,9 @@ import backend.app.settings.twitter_api as twitter_api
 
 from flask import render_template, request, make_response
 from backend.app.settings.logging import logging_setting
-
 from backend.app.TweetPost import TweetPost
+
+from backend.app.functions.connect_firestorage import upload_bucket_file
 
 from flask import Flask
 import os  # for nonce
@@ -29,7 +30,7 @@ import shutil
 from requests_oauthlib import OAuth1Session
 
 app = vue_app()
-logger = logging_setting('TweetGeneratorLogging')
+logger, logging_file = logging_setting('TweetGeneratorLogging')
 
 
 @app.route('/')
@@ -57,12 +58,14 @@ def tweet_post():
             )
             response_message = tweet_post.tweet_posting(twitter_oath)
             logger.info('Tweet message: {}'.format(response_message))
-
+            # fireストレージにアップロード
+            upload_bucket_file(logging_file, logger)
             return response_message
-    except:
+    except Exception as e:
         logger.error(traceback.format_exc())
-        response_message = "ツイートに失敗しました"
-        return response_message
+        # fireストレージにアップロード
+        upload_bucket_file(logging_file, logger)
+        return "ツイートに失敗しました"
 
 
 @app.route('/generate', methods=["POST"])
@@ -90,12 +93,16 @@ def tweet_generate():
         elapsed_time = time.time() - start
         # ローカルファイルを消す
         logger.info('finish time: {} [sec.]'.format(elapsed_time))
+        # fireストレージにアップロード
+        upload_bucket_file(logging_file, logger)
         return result_text
-    except:
+    except Exception as e:
         logger.error(traceback.format_exc())
         result_text = "ツイート生成に失敗しました。もう一度やってみてください。\nまた、鍵アカウントはツイート生成できません。"
         elapsed_time = time.time() - start
         logger.error('error finish time: {} [sec.]'.format(elapsed_time))
+        # fireストレージにアップロード
+        upload_bucket_file(logging_file, logger)
         return result_text
 
 
