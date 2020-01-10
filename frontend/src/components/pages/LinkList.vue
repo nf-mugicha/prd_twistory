@@ -95,8 +95,7 @@ export default {
       const userinfo = this.$store.getters['auth/user']
       // POST送信する
       axios.post(
-        'http://0.0.0.0:5000/tweet',
-        // 'https://aitter-twigene.work/tweet',
+        'https://aitter-twigene.work/tweet',
         {
           account: this.screen_name,
           generated_text: this.generatedTweet,
@@ -111,11 +110,14 @@ export default {
           alert(res.data['res_text'])
           if (res.data['status'] !== 200) {
             const tweetPage = this.createTweetUrl()
-            window.open(tweetPage, '_blank')
+            if (!window.open(tweetPage)) {
+              window.location.href = tweetPage
+            } else {
+              window.open(tweetPage)
+            }
           }
         })
         .catch(error => {
-          console.log(error)
           this.processing = false
           alert('ツイートに失敗しました。もう一度試してみてください')
         })
@@ -133,8 +135,7 @@ export default {
       this.processing = true
       // POST送信する
       axios.post(
-        'http://0.0.0.0:5000/generate',
-        // 'https://aitter-twigene.work/generate',
+        'https://aitter-twigene.work/generate',
         {
           account: this.screen_name
         }
@@ -145,7 +146,6 @@ export default {
           this.processing = false
         })
         .catch(error => {
-          console.log(error)
           this.processing = false
           this.generatedTweet = 'ツイート生成に失敗しました。もう一度試してみてください'
         })
