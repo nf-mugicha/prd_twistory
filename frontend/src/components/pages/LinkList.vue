@@ -71,7 +71,9 @@ export default {
     return {
       generatedTweet: null,
       NotFound: false,
-      processing: false
+      processing: false,
+      tweetUrl: '',
+      tweetText: ''
     }
   },
   props: {
@@ -93,7 +95,8 @@ export default {
       const userinfo = this.$store.getters['auth/user']
       // POST送信する
       axios.post(
-        'https://aitter-twigene.work/tweet',
+        'http://0.0.0.0:5000/tweet',
+        // 'https://aitter-twigene.work/tweet',
         {
           account: this.screen_name,
           generated_text: this.generatedTweet,
@@ -105,7 +108,11 @@ export default {
       // 送信完了
         .then((res) => {
           this.processing = false
-          alert(res.data)
+          alert(res.data['res_text'])
+          if (res.data['status'] !== 200) {
+            const tweetPage = this.createTweetUrl()
+            window.open(tweetPage, '_blank')
+          }
         })
         .catch(error => {
           console.log(error)
@@ -113,12 +120,21 @@ export default {
           alert('ツイートに失敗しました。もう一度試してみてください')
         })
     },
+    createTweetUrl () {
+      // Twitter用のurl作成
+      const url = encodeURIComponent(location.href)
+      const hashTags = encodeURI('ついじぇね,自分bot')
+      const generatedText = encodeURI(this.generatedTweet + '\n\n')
+      this.tweetUrl = 'https://twitter.com/intent/tweet?text=' + generatedText + '&hashtags=' + hashTags + '&url=' + url
+      return this.tweetUrl
+    },
     TweetGenerate (btn) {
       if (this.processing) return
       this.processing = true
       // POST送信する
       axios.post(
-        'https://aitter-twigene.work/generate',
+        'http://0.0.0.0:5000/generate',
+        // 'https://aitter-twigene.work/generate',
         {
           account: this.screen_name
         }

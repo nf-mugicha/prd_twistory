@@ -49,26 +49,35 @@ class TweetPost(object):
         req = twitter_oath.post(url, params)
         self.logger.info(req)
 
-        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
+        slack = slackweb.Slack(
+            url="https://hooks.slack.com/services/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")
 
         if req.status_code == 200:
             self.logger.info('tweet success')
             try:
                 slack.notify(text=generated_text, username=self.account)
-                return 'ツイートしました！'
-            except:
+                response_data = {"res_text": "ツイートしました！",
+                                 "status": 200}
+                return response_data
+            except Exception:
                 self.logger.error("could not connect to slack")
                 self.logger.error(traceback.format_exc())
-                return 'ツイートしました！'
+                response_data = {"res_text": "ツイートしました！",
+                                 "status": 200}
+                return response_data
         elif req.status_code == 403:
             self.logger.error(req.text)
             slack.notify(text=req.text, username=self.account)
-            return "twitter投稿API上限に達しました。解除されるまで暫くお待ち下さい・・"
+            response_data = {
+                "res_text": "twitter投稿API上限に達しました。twitter投稿画面を開きます", "status": 403}
+            return response_data
         else:
             self.logger.error('tweet faild')
             slack.notify(text=req.text, username=self.account)
             self.logger.error(req.text)
-            return 'ツイート失敗しました'
+            response_data = {
+                "res_text": "ツイート失敗しました。twitter投稿画面を開きます", "status": 401}
+            return response_data
 
 
 if __name__ == '__main__':

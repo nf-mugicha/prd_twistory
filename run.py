@@ -65,7 +65,9 @@ def tweet_post():
         logger.error(traceback.format_exc())
         # fireストレージにアップロード
         upload_bucket_file(logging_file, logger)
-        return "ツイートに失敗しました"
+        response_data = {
+            "res_text": "ツイート失敗しました。twitter投稿画面を開きます", "status": 401}
+        return response_data
 
 
 @app.route('/generate', methods=["POST"])
