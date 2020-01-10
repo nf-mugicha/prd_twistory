@@ -45,11 +45,11 @@ class TweetPost(object):
         # params = {'status': generated_text +
         #           str('\n\n #ついじぇね #') + str(self.display_name) + "ボットのツイート" + "\n自分っぽいツイートを自動生成してみよう！" + str('\n https://aitter-twigene.me')}
         params = {'status': generated_text +
-                  str('\n\n #ついじぇね') + str('\n https://aitter-twigene.me')}
+                  str('\n\n #ついじぇね #自分bot') + str('\n https://aitter-twigene.me')}
         req = twitter_oath.post(url, params)
         self.logger.info(req)
 
-        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
+        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
 
         if req.status_code == 200:
             self.logger.info('tweet success')
