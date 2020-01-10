@@ -49,11 +49,11 @@ class TweetPost(object):
         req = twitter_oath.post(url, params)
         self.logger.info(req)
 
+        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
+
         if req.status_code == 200:
             self.logger.info('tweet success')
             try:
-                slack = slackweb.Slack(
-                    url="https://hooks.slack.com/services/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")
                 slack.notify(text=generated_text, username=self.account)
                 return 'ツイートしました！'
             except:
@@ -61,9 +61,12 @@ class TweetPost(object):
                 self.logger.error(traceback.format_exc())
                 return 'ツイートしました！'
         elif req.status_code == 403:
-            return "ツイートが重複しています"
+            self.logger.error(req.text)
+            slack.notify(text=req.text, username=self.account)
+            return "twitter投稿API上限に達しました。解除されるまで暫くお待ち下さい・・"
         else:
             self.logger.error('tweet faild')
+            slack.notify(text=req.text, username=self.account)
             self.logger.error(req.text)
             return 'ツイート失敗しました'
 

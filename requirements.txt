@@ -10,4 +10,5 @@ mecab-python3==0.996.2
 # seaborn==0.9.0
 python-twitter==3.5
 uwsgi
-slackweb
+slackweb==1.0.5
+timeout-decorator==0.4.1
