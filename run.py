@@ -59,12 +59,12 @@ def tweet_post():
             response_message = tweet_post.tweet_posting(twitter_oath)
             logger.info('Tweet message: {}'.format(response_message))
             # fireストレージにアップロード
-            upload_bucket_file(logging_file, logger)
+            # upload_bucket_file(logging_file, logger)
             return response_message
     except Exception as e:
         logger.error(traceback.format_exc())
         # fireストレージにアップロード
-        upload_bucket_file(logging_file, logger)
+        # upload_bucket_file(logging_file, logger)
         response_data = {
             "res_text": "ツイート失敗しました。twitter投稿画面を開きます", "status": 401}
         return response_data
@@ -96,7 +96,7 @@ def tweet_generate():
         # ローカルファイルを消す
         logger.info('finish time: {} [sec.]'.format(elapsed_time))
         # fireストレージにアップロード
-        upload_bucket_file(logging_file, logger)
+        # upload_bucket_file(logging_file, logger)
         return result_text
     except Exception as e:
         logger.error(traceback.format_exc())
@@ -104,7 +104,7 @@ def tweet_generate():
         elapsed_time = time.time() - start
         logger.error('error finish time: {} [sec.]'.format(elapsed_time))
         # fireストレージにアップロード
-        upload_bucket_file(logging_file, logger)
+        # upload_bucket_file(logging_file, logger)
         return result_text
 
 
