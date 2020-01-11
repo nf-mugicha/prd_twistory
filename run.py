@@ -59,7 +59,7 @@ def tweet_post():
             response_message = tweet_post.tweet_posting(twitter_oath)
             logger.info('Tweet message: {}'.format(response_message))
             # fireストレージにアップロード
-            # upload_bucket_file(logging_file, logger)
+            #  upload_bucket_file(logging_file, logger)
             return response_message
     except Exception as e:
         logger.error(traceback.format_exc())

@@ -41,7 +41,7 @@ def logging_setting(logger_name):
     if os.path.exists(str(logger_name)) is not True:
         os.mkdir(str(logger_name))
     # テキスト出力先
-    timestamp = datetime.now().strftime("%Y-%m-%d:%H")
+    timestamp = datetime.now().strftime("%Y-%m-%d-%H")
     # 保存する
     logging_file = '{0}/{1}_{2}.log'.format(
         str(logger_name), str(logger_name), timestamp)
