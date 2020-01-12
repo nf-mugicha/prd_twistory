@@ -33,7 +33,7 @@ class GenerateText(object):
         # DBが存在しないときは例外をあげる
         if not os.path.exists(triplet_freqs_tsv):
             self.logger.error(
-                "tsv file does not exist: {]".format(triplet_freqs_tsv))
+                "tsv file does not exist: {}".format(triplet_freqs_tsv))
             raise IOError("tsvファイルが存在しません")
 
         text_3grams_list = []

@@ -49,7 +49,7 @@ class TweetPost(object):
         req = twitter_oath.post(url, params)
         self.logger.info(req)
 
-        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
+        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
 
         if req.status_code == 200:
             self.logger.info('tweet success')

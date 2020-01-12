@@ -13,10 +13,10 @@ import pickle
 import os
 import shutil
 import time
-# from timeout_decorator import timeout, TimeoutError
+from timeout_decorator import timeout, TimeoutError
 
 
-# @timeout(30, use_signals=False)
+@timeout(180, use_signals=False)
 def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
     logger.info("start latests' 3200 tweets scraping")
     # 3200ツイートを入れる空のリストを用意
@@ -39,8 +39,8 @@ def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
         logger.error(
             "{} may be private account or does not exists, can not get user timeline".format(account))
         # ディレクトリを消す
-        logger.error('delete directry: {}'.format(filepath))
-        shutil.rmtree(filepath)
+        # logger.error('delete directry: {}'.format(filepath))
+        # shutil.rmtree(filepath)
         for i in range(3 + 1):
             logger.error('retry {}'.format(i))
             sleep_sec = 2 ** i
