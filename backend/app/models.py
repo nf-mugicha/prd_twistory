@@ -141,7 +141,10 @@ class TweetsGenerater(object):
             max_id = int(latest_tweets[-1].id)-1
             c = 1
             since_id_flag = True
+            latest_id = int(all_tweets[0].id)
+            max_id = int(all_tweets[-1].id)
             while since_id_flag:
+                max_id = int(all_tweets[-1].id)
                 # latest_id = int(all_tweets[-1].id)
                 try:
                     scraping_start_time = time.time()
@@ -162,19 +165,16 @@ class TweetsGenerater(object):
                     self.logger.error('something wrong {}'.format(e))
                     self.logger.error(traceback.format_exc())
                     break
-                # 新しいツイートを格納
+                    # since_idに到達したら終わり
                 for l in latest_tweets:
                     # リストに追加する
                     all_tweets.append(l)
-                # 最後まで取り終えたら終わる
-                if int(all_tweets[-1].id) == int(max_id):
+                if int(all_tweets[-1].id) == max_id:
                     since_id_flag = False
                     break
-                # 取得した200ツイートを格納
                 c = c+1
-                self.logger.info(
-                    "count {0} all_tweets[-1].id: {1}".format(c, all_tweets[-1].id))
-                max_id = all_tweets[-1].id
+                self.logger.info("count {0} all_tweets[-1].id: {1}".format(c, all_tweets[-1].id))
+                self.logger.info("count {0} max_id: {1}".format(c, max_id))
             max_id = int(all_tweets[-1].id)-1
         # 取得した3200ツイート生データをファイル書き出ししておく
         with open(filename_3200, "a", newline="") as f:

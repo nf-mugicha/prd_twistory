@@ -2,8 +2,10 @@ import json
 from requests_oauthlib import OAuth1Session
 import slackweb
 import traceback
+from datetime import datetime
 
 from .settings import twitter_api
+from .settings.firebase import db
 
 
 class TweetPost(object):
@@ -48,8 +50,14 @@ class TweetPost(object):
                   str('\n\n #ついじぇね #自分bot') + str('\n https://aitter-twigene.me')}
         req = twitter_oath.post(url, params)
         self.logger.info(req)
+        doc_ref = db.collection('UsersTweets')
+        doc_ref.add({
+            'account': self.account,
+            'generated_text': generated_text,
+            'created_at': datetime.now().strftime("%Y-%m-%d:%H:%M:%S")
+        })
 
-        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
+        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
 
         if req.status_code == 200:
             self.logger.info('tweet success')

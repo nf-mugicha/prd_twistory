@@ -28,10 +28,11 @@ import traceback
 import time
 import shutil
 from requests_oauthlib import OAuth1Session
+import slackweb
 
 app = vue_app()
 logger, logging_file = logging_setting('TweetGeneratorLogging')
-
+slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
 
 @app.route('/')
 def index():
@@ -62,6 +63,7 @@ def tweet_post():
             #  upload_bucket_file(logging_file, logger)
             return response_message
     except Exception as e:
+        slack.notify(text=e, username=account)
         logger.error(traceback.format_exc())
         # fireストレージにアップロード
         # upload_bucket_file(logging_file, logger)
@@ -102,6 +104,7 @@ def tweet_generate():
         return result_text
     except Exception as e:
         logger.error(traceback.format_exc())
+        slack.notify(text=e, username=account)
         result_text = "ツイート生成に失敗しました。もう一度やってみてください。\nまた、鍵アカウントはツイート生成できません。"
         elapsed_time = time.time() - start
         logger.error('error finish time: {} [sec.]'.format(elapsed_time))
