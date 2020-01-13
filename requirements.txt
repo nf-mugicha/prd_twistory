@@ -12,3 +12,7 @@ python-twitter==3.5
 uwsgi
 slackweb==1.0.5
 timeout-decorator==0.4.1
+urllib3
+pyopenssl
+ndg-httpsclient
+pyasn1

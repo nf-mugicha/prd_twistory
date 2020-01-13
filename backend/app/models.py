@@ -136,6 +136,9 @@ class TweetsGenerater(object):
             # とりあえず全件格納する
             all_tweets.extend(latest_tweets)
             self.logger.info("start 200 more tweets scraping")
+            # since_idから遡った200件の、最も新しいid（200件以上新作があった時に使う）
+            latest_id = int(latest_tweets[0].id)
+            max_id = int(latest_tweets[-1].id)-1
             c = 1
             since_id_flag = True
             while since_id_flag:
@@ -159,17 +162,19 @@ class TweetsGenerater(object):
                     self.logger.error('something wrong {}'.format(e))
                     self.logger.error(traceback.format_exc())
                     break
-                    # since_idに到達したら終わり
-                if int(all_tweets[-1].id) == latest_id:
-                    since_id_flag = False
-                    break
+                # 新しいツイートを格納
                 for l in latest_tweets:
                     # リストに追加する
                     all_tweets.append(l)
+                # 最後まで取り終えたら終わる
+                if int(all_tweets[-1].id) == int(max_id):
+                    since_id_flag = False
+                    break
                 # 取得した200ツイートを格納
                 c = c+1
                 self.logger.info(
-                    "count {0} latest_id: {1}".format(c, all_tweets[-1].id))
+                    "count {0} all_tweets[-1].id: {1}".format(c, all_tweets[-1].id))
+                max_id = all_tweets[-1].id
             max_id = int(all_tweets[-1].id)-1
         # 取得した3200ツイート生データをファイル書き出ししておく
         with open(filename_3200, "a", newline="") as f:
@@ -232,6 +237,9 @@ class TweetsGenerater(object):
                 self.logger,
                 self.filepath
             )
+            # API制限でツイート取得できてない
+            if len(all_tweets) == 0:
+                return 
         # tsvファイルもあればそれを開く
         if os.path.exists(self.filename_3200):
             self.logger.info('already done all tweets scraping')

@@ -16,8 +16,13 @@ import time
 from timeout_decorator import timeout, TimeoutError
 
 
+<<<<<<< HEAD
 @timeout(180, use_signals=False)
+=======
+# @timeout(180, use_signals=False)
+>>>>>>> 722291df4532663364860f74f834301ae65be714
 def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
+    logger.info("new user: {}".format(account))
     logger.info("start latests' 3200 tweets scraping")
     # 3200ツイートを入れる空のリストを用意
     all_tweets = []
@@ -50,6 +55,7 @@ def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
                 screen_name=account,
                 count=200
             )
+        return 
     # 最新のツイートid取得
     latest_id = latest_tweets[0].id
     logger.info("now's latest id: {}".format(str(latest_tweets[0].id)))
