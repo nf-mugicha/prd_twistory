@@ -57,7 +57,7 @@ class TweetPost(object):
             'created_at': datetime.now().strftime("%Y-%m-%d:%H:%M:%S")
         })
 
-        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
+        slack = slackweb.Slack(url=twitter_api.SLACK_TWEET)
         if req.status_code == 200:
             self.logger.info('tweet success')
             try:

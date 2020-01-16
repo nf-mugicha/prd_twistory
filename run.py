@@ -32,7 +32,7 @@ import slackweb
 
 app = vue_app()
 logger, logging_file = logging_setting('TweetGeneratorLogging')
-slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
+slack = slackweb.Slack(url=twitter_api.SLACK_ERROR)
 
 @app.route('/')
 def index():
