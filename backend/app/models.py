@@ -99,7 +99,7 @@ class TweetsGenerater(object):
         all_tweets = []
         # since_idを探すための箱
         search_id_list = []
-        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
+        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
         # 直近200ツイートを取得
         try:
             latest_tweets = api.GetUserTimeline(

@@ -57,7 +57,7 @@ class TweetPost(object):
             'created_at': datetime.now().strftime("%Y-%m-%d:%H:%M:%S")
         })
 
-        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
+        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
         if req.status_code == 200:
             self.logger.info('tweet success')
             try:
@@ -75,7 +75,7 @@ class TweetPost(object):
             self.logger.error(req.text)
             slack.notify(text=req.text, username=self.account)
             response_data = {
-                "res_text": "twitter投稿API上限に達しました。twitter投稿画面を開きます", "status": 403}
+                "res_text": "ツイートが重複しているかtwitter投稿API上限に達しました。\n twitter投稿画面を開きます", "status": 403}
             return response_data
         else:
             self.logger.error('tweet faild')
