@@ -16,7 +16,7 @@ import time
 from timeout_decorator import timeout, TimeoutError
 
 
-@timeout(300, use_signals=False)
+@timeout(180, use_signals=False)
 def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
     logger.info("new user: {}".format(account))
     logger.info("start latests' 3200 tweets scraping")

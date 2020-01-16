@@ -12,6 +12,7 @@ import csv
 import traceback
 import time
 import shutil
+import slackweb
 
 try:
     from .functions.get_3200_user_timeline import get_3200_user_timeline
@@ -98,16 +99,9 @@ class TweetsGenerater(object):
         all_tweets = []
         # since_idを探すための箱
         search_id_list = []
+        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
         # 直近200ツイートを取得
         try:
-            latest_tweets = api.GetUserTimeline(
-                screen_name=account,
-                count=200,
-                since_id=since_id
-            )
-        except (ConnectionResetError) as e:
-            self.logger.error('ConnectionResetError, do retry')
-            self.logger.error(e)
             latest_tweets = api.GetUserTimeline(
                 screen_name=account,
                 count=200,
@@ -119,6 +113,7 @@ class TweetsGenerater(object):
             # ディレクトリを消す
             self.logger.error(e)
             self.logger.error(traceback.format_exc())
+            slack.notify(text=e, username=account)
             # 最新ツイート取得できなかったら、空のリストを返す（既に3200ツイートは取得し終えているのでそれで賄う）
             latest_tweets = []
         # もし取得するツイートがなかったらそのまま返す
