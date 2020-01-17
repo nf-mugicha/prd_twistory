@@ -5,6 +5,7 @@
       Aitter -ついじぇね- は、「あなたっぽい」ツイートを自動生成するサービスです。<br>ツイートすればするほどそれっぽくなります。
       </h3>
       <p class="index__attention">初めてのツイート生成は時間が掛かります。<br>バックグラウンドで動作するので、ブラウザを閉じても大丈夫です。２回目以降は時間かかりません</p>
+      <!-- <maintenance></maintenance> -->
     <link-list
     v-if="isLogin"
     :screen_name="userinfo.screenName"
@@ -19,12 +20,14 @@
 import Login from '../common/Login'
 import LinkList from '../pages/LinkList'
 import IndexExplain from '../IndexExplain'
+import Maintenance from '../common/Maintenance'
 export default {
   name: 'Index',
   components: {
     'login': Login,
     'link-list': LinkList,
-    'index-explain': IndexExplain
+    'index-explain': IndexExplain,
+    'maintenance': Maintenance
   },
   computed: {
     isLogin () {

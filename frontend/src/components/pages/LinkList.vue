@@ -118,6 +118,7 @@ export default {
           }
         })
         .catch(error => {
+          console.log(error)
           this.processing = false
           alert('ツイートに失敗しました。もう一度試してみてください')
         })
@@ -146,6 +147,7 @@ export default {
           this.processing = false
         })
         .catch(error => {
+          console.log(error)
           this.processing = false
           this.generatedTweet = 'ツイート生成に失敗しました。もう一度試してみてください'
         })
