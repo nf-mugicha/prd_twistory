@@ -60,10 +60,10 @@ def tweet_post():
             response_message = tweet_post.tweet_posting(twitter_oath)
             logger.info('Tweet message: {}'.format(response_message))
             # fireストレージにアップロード
-            #  upload_bucket_file(logging_file, logger)
+            # upload_bucket_file(logging_file, logger)
             return response_message
     except Exception as e:
-        slack.notify(text=e, username=account)
+        slack.notify(text=str(traceback.format_exc()), username=account)
         logger.error(traceback.format_exc())
         # fireストレージにアップロード
         # upload_bucket_file(logging_file, logger)
@@ -104,7 +104,7 @@ def tweet_generate():
         return result_text
     except Exception as e:
         logger.error(traceback.format_exc())
-        slack.notify(text=e, username=account)
+        slack.notify(text=str(traceback.format_exc()), username=account)
         result_text = "ツイート生成に失敗しました。もう一度やってみてください。\nまた、鍵アカウントはツイート生成できません。"
         elapsed_time = time.time() - start
         logger.error('error finish time: {} [sec.]'.format(elapsed_time))
