@@ -230,9 +230,12 @@ class TweetsGenerater(object):
         # ストレージからダウンロード
         download_bucket_file(self.user_timeline_3200_raw, self.logger)
         download_bucket_file(self.filename_3200, self.logger)
+        slack = slackweb.Slack(url=twitter_api.SLACK_TWEET)
         # 既に3200件のデータを取り終えていたらやらない
         if not os.path.exists(self.user_timeline_3200_raw):
+            slack.notify(text="new user", username=self.account)
             # 3200件のツイートデータ取得・保存
+
             all_tweets, latest_id, max_id = get_3200_user_timeline(
                 self.account,
                 self.user_timeline_3200_raw,
