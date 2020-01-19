@@ -73,13 +73,13 @@ class TweetPost(object):
                 return response_data
         elif req.status_code == 403:
             self.logger.error(req.text)
-            slack.notify(text=req.text, username=self.account)
+            slack.notify(text=str(req.text) + str(generated_text), username=self.account)
             response_data = {
                 "res_text": "ツイートが重複しているかtwitter投稿API上限に達しました。\n twitter投稿画面を開きます", "status": 403}
             return response_data
         else:
             self.logger.error('tweet faild')
-            slack.notify(text=req.text, username=self.account)
+            slack.notify(text=str(req.text) + str(generated_text), username=self.account)
             self.logger.error(req.text)
             response_data = {
                 "res_text": "ツイート失敗しました。twitter投稿画面を開きます", "status": 401}

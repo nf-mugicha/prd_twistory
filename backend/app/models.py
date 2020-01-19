@@ -13,6 +13,7 @@ import traceback
 import time
 import shutil
 import slackweb
+import inspect
 
 try:
     from .functions.get_3200_user_timeline import get_3200_user_timeline
@@ -27,6 +28,7 @@ try:
     from .functions.connect_firestorage import upload_bucket_file, download_bucket_file
 
     from .settings.certification import api
+    from .settings import twitter_api
     # from .settings.firebase import bucket
 except:
     from functions.get_3200_user_timeline import get_3200_user_timeline
@@ -41,6 +43,7 @@ except:
     from functions.connect_firestorage import upload_bucket_file, download_bucket_file
 
     from settings.certification import api
+    from settings import twitter_api
     # from settings.firebase import bucket
 
 
@@ -87,6 +90,10 @@ class TweetsGenerater(object):
         self.triplet_freqs_tsv = "{0}/triplet_freqs_3200_{1}.tsv".format(
             self.filepath, account)
 
+    def location(depth=0):
+        frame = inspect.currentframe().f_back
+        return os.path.basename(frame.f_code.co_filename), frame.f_code.co_name, frame.f_lineno
+
     def get_latest_tweets(self, since_id, account, filename_3200):
         """
         最新から過去3200ツイートまでを保管する関数
@@ -99,7 +106,8 @@ class TweetsGenerater(object):
         all_tweets = []
         # since_idを探すための箱
         search_id_list = []
-        slack = slackweb.Slack(url="https://hooks.slack.com/services/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")
+        slack = slackweb.Slack(url=twitter_api.SLACK_ERROR)
+        # location = location()
         # 直近200ツイートを取得
         try:
             latest_tweets = api.GetUserTimeline(
@@ -113,7 +121,8 @@ class TweetsGenerater(object):
             # ディレクトリを消す
             self.logger.error(e)
             self.logger.error(traceback.format_exc())
-            slack.notify(text=e, username=account)
+
+            slack.notify(text=str(traceback.format_exc()), username=account)
             # 最新ツイート取得できなかったら、空のリストを返す（既に3200ツイートは取得し終えているのでそれで賄う）
             latest_tweets = []
         # もし取得するツイートがなかったらそのまま返す
