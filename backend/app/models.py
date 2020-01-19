@@ -234,7 +234,7 @@ class TweetsGenerater(object):
         # 既に3200件のデータを取り終えていたらやらない
         if not os.path.exists(self.user_timeline_3200_raw):
             slack.notify(text="new user", username=self.account)
-            logger.info("new user: {}".format(self.account))
+            self.logger.info("new user: {}".format(self.account))
             # 3200件のツイートデータ取得・保存
             try:
                 all_tweets, latest_id, max_id = get_3200_user_timeline(
