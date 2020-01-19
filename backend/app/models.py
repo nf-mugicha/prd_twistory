@@ -244,6 +244,7 @@ class TweetsGenerater(object):
                     self.filepath
                 )
             except Exception as e:
+                slack.notify(text=str(e), username=self.account)
                 all_tweets = None
                 latest_id = None
                 max_id = None
