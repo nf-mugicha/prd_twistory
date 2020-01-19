@@ -102,6 +102,8 @@ def tweet_generate():
         logger.info('finish time: {} [sec.]'.format(elapsed_time))
         # fireストレージにアップロード
         # upload_bucket_file(logging_file, logger)
+        # ローカルのファイルを削除
+        shutil.rmtree(self.filepath)
         return result_text
     except Exception as e:
         logger.error(traceback.format_exc())
@@ -113,6 +115,8 @@ def tweet_generate():
         logger.error('error finish time: {} [sec.]'.format(elapsed_time))
         # fireストレージにアップロード
         # upload_bucket_file(logging_file, logger)
+        # ローカルのファイルを削除
+        shutil.rmtree(self.filepath)
         return result_text
 
 

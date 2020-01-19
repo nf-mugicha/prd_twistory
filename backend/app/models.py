@@ -332,8 +332,6 @@ class TweetsGenerater(object):
         generator = GenerateText(self.logger)
         result_text = generator.generate_from_tsv(self.triplet_freqs_tsv)
         self.logger.info('finish generate tweets')
-        # ローカルのファイルを削除
-        shutil.rmtree(self.filepath)
 
         return result_text
 
