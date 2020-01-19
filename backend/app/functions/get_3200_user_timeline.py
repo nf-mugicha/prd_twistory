@@ -51,7 +51,8 @@ def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
                 screen_name=account,
                 count=200
             )
-            if len(latest_tweets) > 0:
+            if latest_tweets[0].id:
+                logger.info(latest_tweets[0])
                 break
     # 最新のツイートid取得
     latest_id = latest_tweets[0].id
