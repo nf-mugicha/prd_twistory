@@ -102,7 +102,7 @@ def tweet_generate():
         tweets_generater = TweetsGenerater(account, logger)
         # 最新の3200ツイートを取得
         latest_id, account, filename_3200 = tweets_generater.get_tweet()
-        if not latest_id:
+        if latest_id is None:
             return "twitterAPI制限により現在ツイート取得ができません。約15分後に再度アクセスして下さい"
         # 今保存されているものより新しいツイートを取得し、tsvファイルに上書きする
         tweets_generater.get_latest_tweets(
