@@ -120,9 +120,6 @@ class TweetsGenerater(object):
                 "{} could not get latest tweets".format(account))
             # ディレクトリを消す
             self.logger.error(e)
-            self.logger.error(traceback.format_exc())
-
-            slack.notify(text=str(traceback.format_exc()), username=account)
             # 最新ツイート取得できなかったら、空のリストを返す（既に3200ツイートは取得し終えているのでそれで賄う）
             latest_tweets = []
         # もし取得するツイートがなかったらそのまま返す
@@ -177,7 +174,8 @@ class TweetsGenerater(object):
                     since_id_flag = False
                     break
                 c = c+1
-                self.logger.info("count {0} all_tweets[-1].id: {1}".format(c, all_tweets[-1].id))
+                self.logger.info(
+                    "count {0} all_tweets[-1].id: {1}".format(c, all_tweets[-1].id))
                 self.logger.info("count {0} max_id: {1}".format(c, max_id))
             max_id = int(all_tweets[-1].id)-1
         # 取得した3200ツイート生データをファイル書き出ししておく
@@ -243,7 +241,7 @@ class TweetsGenerater(object):
             )
             # API制限でツイート取得できてない
             if len(all_tweets) == 0:
-                return 
+                return
         # tsvファイルもあればそれを開く
         if os.path.exists(self.filename_3200):
             self.logger.info('already done all tweets scraping')

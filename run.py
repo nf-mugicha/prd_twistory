@@ -34,6 +34,7 @@ app = vue_app()
 logger, logging_file = logging_setting('TweetGeneratorLogging')
 slack = slackweb.Slack(url=twitter_api.SLACK_ERROR)
 
+
 @app.route('/')
 def index():
     return 'hello world!!'
@@ -104,8 +105,10 @@ def tweet_generate():
         return result_text
     except Exception as e:
         logger.error(traceback.format_exc())
-        slack.notify(text=str(traceback.format_exc()), username=account)
         result_text = "ツイート生成に失敗しました。もう一度やってみてください。\nまた、鍵アカウントはツイート生成できません。"
+        logger.error(result_text)
+        slack.notify(text=str(result_text) +
+                     str(traceback.format_exc()), username=account)
         elapsed_time = time.time() - start
         logger.error('error finish time: {} [sec.]'.format(elapsed_time))
         # fireストレージにアップロード
