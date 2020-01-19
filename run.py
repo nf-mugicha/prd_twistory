@@ -81,12 +81,24 @@ def tweet_generate():
         logger.info(request)
         account_info = request.json
         logger.info('POST data: {}'.format(account_info))
+    except Exception as e:
+        logger.error(traceback.format_exc())
+        result_text = "リクエスト取得に失敗しました。もう一度やってみてください。\nまた、鍵アカウントはツイート生成できません。"
+        logger.error(result_text)
+        slack.notify(text=str(result_text) +
+                     str(traceback.format_exc()), username=account)
+        elapsed_time = time.time() - start
+        logger.error('error finish time: {} [sec.]'.format(elapsed_time))
+        return result_text
+    try:
         if type(account_info) == dict:
             account = account_info['account']
         else:
             account = ""
-            result_text = "ツイート取得に失敗しました。お手数ですが、ログインし直してもう一度お試しお願いします。また、鍵アカウントはツイート生成できません。"
+            result_text = "アカウント取得に失敗しました。お手数ですが、ログインし直してもう一度お試しお願いします。また、鍵アカウントはツイート生成できません。"
+            return result_text
         logger.info('account name: {}'.format(account))
+        filepath = "get_tweets_assets/{0}".format(account)
         tweets_generater = TweetsGenerater(account, logger)
         # 最新の3200ツイートを取得
         latest_id, account, filename_3200 = tweets_generater.get_tweet()
@@ -103,7 +115,9 @@ def tweet_generate():
         # fireストレージにアップロード
         # upload_bucket_file(logging_file, logger)
         # ローカルのファイルを削除
-        shutil.rmtree(self.filepath)
+        if os.path.exists(filepath):
+            logger.info("delete local file: {}".format(filepath))
+            shutil.rmtree(filepath)
         return result_text
     except Exception as e:
         logger.error(traceback.format_exc())
@@ -116,7 +130,9 @@ def tweet_generate():
         # fireストレージにアップロード
         # upload_bucket_file(logging_file, logger)
         # ローカルのファイルを削除
-        shutil.rmtree(self.filepath)
+        if os.path.exists(filepath):
+            logger.error("delete local file: {}".format(filepath))
+            shutil.rmtree(filepath)
         return result_text
 
 
