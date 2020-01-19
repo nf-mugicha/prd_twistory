@@ -120,7 +120,13 @@ export default {
         .catch(error => {
           console.log(error)
           this.processing = false
-          alert('ツイートに失敗しました。もう一度試してみてください')
+          alert('ツイートに失敗しました。投稿画面を開きます')
+          const tweetPage = this.createTweetUrl()
+          if (!window.open(tweetPage)) {
+            window.location.href = tweetPage
+          } else {
+            window.open(tweetPage)
+          }
         })
     },
     createTweetUrl () {
