@@ -245,6 +245,8 @@ class TweetsGenerater(object):
                 )
             except Exception as e:
                 slack.notify(text=str(e), username=self.account)
+                slack.notify(text=str(traceback.format_exc()), username=account)
+                self.logger.error(traceback.format_exc())
                 all_tweets = None
                 latest_id = None
                 max_id = None
