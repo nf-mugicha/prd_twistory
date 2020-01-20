@@ -17,7 +17,7 @@ def upload_bucket_file(filename, logger):
     except:
         for i in range(3 + 1):
             logger.error('storage upload retry {}'.format(i))
-            sleep_sec = 2 ** i
+            sleep_sec = 3
             logger.error('sleep {} sec'.format(sleep_sec))
             time.sleep(sleep_sec)
             blob = bucket.blob(filename)

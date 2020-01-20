@@ -244,8 +244,8 @@ class TweetsGenerater(object):
                     self.filepath
                 )
             except Exception as e:
-                slack.notify(text=str(e), username=self.account)
-                slack.notify(text=str(traceback.format_exc()), username=account)
+                slack.notify(text=str(e), username=str(self.account))
+                slack.notify(text=str(traceback.format_exc()), username=str(self.account))
                 self.logger.error(traceback.format_exc())
                 all_tweets = None
                 latest_id = None
