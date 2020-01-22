@@ -16,7 +16,7 @@ def upload_bucket_file(filename, logger):
         blob.upload_from_filename(filename)
     except:
         for i in range(3 + 1):
-            logger.error('storage upload retry {}'.format(i))
+            logger.error('{0} upload retry {1}'.format(filename, i))
             sleep_sec = 3
             logger.error('sleep {} sec'.format(sleep_sec))
             time.sleep(sleep_sec)
@@ -46,4 +46,3 @@ if __name__ == '__main__':
     logger = logging_setting('TweetGeneratorModelTextLogging')
     filename = "get_tweets_assets/aquirax_k/tweets_3200_raw_aquirax_k.pkl"
     upload_bucket_file(filename, logger)
-
