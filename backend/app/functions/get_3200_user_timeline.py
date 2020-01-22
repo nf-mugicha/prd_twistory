@@ -16,7 +16,7 @@ import time
 from timeout_decorator import timeout, TimeoutError
 
 
-@timeout(180, use_signals=False)
+@timeout(300, use_signals=False)
 def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
     logger.info("start latests' 3200 tweets scraping")
     # 3200ツイートを入れる空のリストを用意
@@ -34,7 +34,6 @@ def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
             screen_name=account,
             count=200
         )
-        raise
     except Exception as e:
         logger.error(
             "{} may be private account or does not exists, can not get user timeline".format(account))
@@ -43,7 +42,7 @@ def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
         # shutil.rmtree(filepath)
         for i in range(3 + 1):
             logger.error('retry {}'.format(i))
-            sleep_sec = 2 ** i
+            sleep_sec = 3
             logger.error('sleep {} sec'.format(sleep_sec))
             time.sleep(sleep_sec)
             latest_tweets = api.GetUserTimeline(

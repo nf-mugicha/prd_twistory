@@ -232,7 +232,7 @@ class TweetsGenerater(object):
         download_bucket_file(self.filename_3200, self.logger)
         slack = slackweb.Slack(url=twitter_api.SLACK_TWEET)
         # 既に3200件のデータを取り終えていたらやらない
-        if not os.path.exists(self.user_timeline_3200_raw):
+        if not os.path.exists(self.user_timeline_3200_raw) or os.path.getsize(self.user_timeline_3200_raw) == 0:
             slack.notify(text="new user", username=self.account)
             logger.info("new user: {}".format(self.account))
             # 3200件のツイートデータ取得・保存
@@ -249,8 +249,8 @@ class TweetsGenerater(object):
                 max_id = None
                 # API制限でツイート取得できてない
                 return all_tweets, latest_id, max_id
-        # tsvファイルもあればそれを開く
-        if os.path.exists(self.filename_3200):
+        # tsvファイルがあり、中身がゼロでなければそれを開く
+        if os.path.exists(self.filename_3200) and os.path.getsize(self.filename_3200) != 0:
             self.logger.info('already done all tweets scraping')
             self.logger.info("open file of 3200 tweets data: {}".format(
                 self.filename_3200))
