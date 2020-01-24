@@ -4,7 +4,10 @@
     <h3 v-if="!isLogin" class="index__description">
       Aitter -ついじぇね- は、「あなたっぽい」ツイートを自動生成するサービスです。<br>ツイートすればするほどそれっぽくなります。
       </h3>
-      <p class="index__attention">初めてのツイート生成は時間が掛かります。<br>バックグラウンドで動作するので、ブラウザを閉じても大丈夫です。２回目以降は時間かかりません</p>
+      <p class="index__attention">初めてのツイート生成は時間が掛かります。
+        <br>また鍵アカウントはツイート生成できませんが、
+        <br>初回ツイート生成時のみ鍵を外して頂けたら、それ以降は鍵アカウントも使用可能です。
+      </p>
       <!-- <maintenance></maintenance> -->
     <link-list
     v-if="isLogin"
