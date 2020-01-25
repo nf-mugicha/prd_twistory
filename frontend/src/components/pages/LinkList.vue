@@ -107,7 +107,7 @@ export default {
       // 送信完了
         .then((res) => {
           this.processing = false
-          alert(res.data['res_text'])
+          // alert(res.data['res_text'])
           if (res.data['status'] !== 200) {
             const tweetPage = this.createTweetUrl()
             if (!window.open(tweetPage)) {
@@ -120,7 +120,7 @@ export default {
         .catch(error => {
           console.log(error)
           this.processing = false
-          alert('ツイートに失敗しました。投稿画面を開きます')
+          // alert('ツイートに失敗しました。投稿画面を開きます')
           const tweetPage = this.createTweetUrl()
           if (!window.open(tweetPage)) {
             window.location.href = tweetPage
