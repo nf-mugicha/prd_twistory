@@ -11,7 +11,9 @@
       >
       AItter -ついじぇね-
       </router-link></v-toolbar-title>
-      <img class="title__logo__img"
+      <img
+        v-if="isLogin"
+        class="title__logo__img"
         src="../../assets/twigene_logo.png"
         alt="twigene"
         >
@@ -30,6 +32,12 @@
         alt="profile"
         >
     </v-avatar>
+    <v-avatar v-else>
+      <img class="title__logo__img"
+        src="../../assets/twigene_logo.png"
+        alt="twigene"
+      >
+    </v-avatar>
       </v-app-bar-nav-icon>
     </v-toolbar>
 
@@ -37,33 +45,82 @@
     v-model="drawer"
     fixed
     temporary
-    v-if="isLogin"
+    text-center
     >
     <v-list-item>
-      <login />
+      <v-col>
+        <v-btn
+          v-for="link in links"
+          :key="link"
+          color="grey"
+          text
+          rounded
+          class="footer__col1"
+          :to="link.path"
+        >
+          {{ link.name }}
+        </v-btn>
+      </v-col>
     </v-list-item>
     <v-list-item>
-      <UserProfile />
+      <v-col>
+      <v-btn
+        color="grey"
+        text
+        rounded
+        class="footer__col1"
+        href="https://twitter.com/twigene_aitter"
+        >
+        公式Twitter
+      </v-btn>
+      </v-col>
+    </v-list-item>
+    <v-list-item>
+      <v-col>
+      <v-btn
+        color="grey"
+        text
+        rounded
+        class="footer__col1"
+        href="https://forms.gle/euY2WbdRziXjFSUk9"
+        >
+        お問い合わせ
+      </v-btn>
+      </v-col>
+    </v-list-item>
+    <v-list-item>
+      <v-col>
+      <login />
+      </v-col>
     </v-list-item>
     </v-navigation-drawer>
   </v-card>
 </template>
 <script>
 import Login from './Login'
-import LinkList from '../pages/LinkList'
+import Index from '../pages/Index'
 import UserProfile from '../UserProfile'
+import TermsOfService from '../pages/TermsOfService'
+import PrivacyPlicy from '../pages/PrivacyPolicy'
 
 export default {
   name: 'Navbar',
   components: {
+    Index,
     Login,
-    LinkList,
-    UserProfile
+    UserProfile,
+    TermsOfService,
+    PrivacyPlicy
   },
   data () {
     return {
       screenName: this.userinfo ? this.userinfo.screenName : null,
-      drawer: null
+      drawer: null,
+      links: [
+        { name: 'Home', path: '/', component: Index },
+        { name: 'プライバシーポリシー', path: '/privacy-policy', component: PrivacyPlicy },
+        { name: '利用規約', path: '/service', component: TermsOfService }
+      ]
     }
   },
   // pathの:idを直接書き換えた時の対応

@@ -5,6 +5,7 @@
       <!-- <AdSense></AdSense> -->
       <router-view></router-view>
     </v-content>
+    <FooterMenu />
     <Footer />
   </v-app>
 </template>
@@ -13,6 +14,7 @@
 import Navbar from './components/common/Navbar'
 import Login from './components/common/Login'
 import Footer from './components/common/Footer'
+import FooterMenu from './components/FooterMenu'
 // import AdSense from './components/common/AdSense'
 
 export default {
@@ -20,7 +22,8 @@ export default {
   components: {
     Navbar,
     Login,
-    Footer
+    Footer,
+    FooterMenu
   },
   data: () => ({
     //

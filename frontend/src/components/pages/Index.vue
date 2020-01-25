@@ -9,26 +9,26 @@
         <br>初回ツイート生成時のみ鍵を外して頂けたら、それ以降は鍵アカウントも使用可能です。
       </p>
       <!-- <maintenance></maintenance> -->
-    <link-list
-    v-if="isLogin"
-    :screen_name="userinfo.screenName"
-    >
-    </link-list>
+      <generate-tweet-button
+      v-if="isLogin"
+      :screen_name="userinfo.screenName"
+      >
+      </generate-tweet-button>
       <login v-else />
-      <index-explain v-if="!isLogin" />
+      <index-explain />
   </div>
 </template>
 
 <script>
 import Login from '../common/Login'
-import LinkList from '../pages/LinkList'
+import GenerateTweetButton from '../GenerateTweetButton'
 import IndexExplain from '../IndexExplain'
 import Maintenance from '../common/Maintenance'
 export default {
   name: 'Index',
   components: {
     'login': Login,
-    'link-list': LinkList,
+    'generate-tweet-button': GenerateTweetButton,
     'index-explain': IndexExplain,
     'maintenance': Maintenance
   },
