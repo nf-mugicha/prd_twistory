@@ -107,7 +107,6 @@ export default {
       // 送信完了
         .then((res) => {
           this.processing = false
-          // alert(res.data['res_text'])
           if (res.data['status'] !== 200) {
             const tweetPage = this.createTweetUrl()
             if (!window.open(tweetPage)) {
@@ -115,6 +114,8 @@ export default {
             } else {
               window.open(tweetPage)
             }
+          } else if (res.data['status'] === 200) {
+            alert(res.data['res_text'])
           }
         })
         .catch(error => {
