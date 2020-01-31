@@ -12,7 +12,6 @@
 
 <script>
 import Navbar from './components/common/Navbar'
-import Login from './components/common/Login'
 import Footer from './components/common/Footer'
 import FooterMenu from './components/FooterMenu'
 // import AdSense from './components/common/AdSense'
@@ -21,7 +20,6 @@ export default {
   name: 'App',
   components: {
     Navbar,
-    Login,
     Footer,
     FooterMenu
   },

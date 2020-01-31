@@ -21,12 +21,11 @@
 <script>
 // firebase構成をインポートする
 import firebase from 'firebase'
-import Navbar from './Navbar'
+// import Navbar from './Navbar'
 
 export default {
   name: 'Login',
   components: {
-    'Navbar': Navbar
   },
   data: function () {
     return {

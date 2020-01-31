@@ -67,10 +67,7 @@ import PrivacyPlicy from '../pages/PrivacyPolicy'
 export default {
   name: 'Footer',
   components: {
-    Login,
-    Index,
-    TermsOfService,
-    PrivacyPlicy
+    Login
   },
   data: () => ({
     links: [

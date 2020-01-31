@@ -106,11 +106,7 @@ import PrivacyPlicy from '../pages/PrivacyPolicy'
 export default {
   name: 'Navbar',
   components: {
-    Index,
-    Login,
-    UserProfile,
-    TermsOfService,
-    PrivacyPlicy
+    Login
   },
   data () {
     return {

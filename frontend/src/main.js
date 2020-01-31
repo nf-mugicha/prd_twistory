@@ -28,31 +28,31 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(fas, fab, far)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
-// Vue.component('adsense', VueAdsense)
+    // Vue.component('adsense', VueAdsense)
 
 Vue.use(moment)
 
 Vue.config.productionTip = false
 
 let createApp = (callback) => {
-  firebase.auth().onAuthStateChanged(user => {
-    if (user) {
-      store.dispatch('auth/currentUser', user)
-    } else {
-      store.dispatch('auth/currentUser', null)
-    }
-  })
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            store.dispatch('auth/currentUser', user)
+        } else {
+            store.dispatch('auth/currentUser', null)
+        }
+    })
 
-  /* eslint-disable no-new */
-  new Vue({
-    el: '#app',
+    /* eslint-disable no-new */
+    new Vue({
+        el: '#app',
 
-    // 他のコンポーネトから、this.$routerやthis.$storeという方法でルーターや洗濯したパラメータの情報にアクセスできる
-    'router': router,
-    'store': store,
-    components: { App },
-    vuetify,
-    template: '<App/>'
-  })
+        // 他のコンポーネトから、this.$routerやthis.$storeという方法でルーターや洗濯したパラメータの情報にアクセスできる
+        'router': router,
+        'store': store,
+        components: { App },
+        vuetify,
+        template: '<App/>'
+    })
 }
 createApp()
