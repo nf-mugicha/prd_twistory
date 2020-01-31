@@ -13,10 +13,8 @@ import pickle
 import os
 import shutil
 import time
-from timeout_decorator import timeout, TimeoutError
 
 
-@timeout(300, use_signals=False)
 def get_3200_user_timeline(account, user_timeline_3200_raw, logger, filepath):
     logger.info("start latests' 3200 tweets scraping")
     # 3200ツイートを入れる空のリストを用意
