@@ -158,8 +158,8 @@ export default {
           axios.post(
             CONSTANT.SLACK_SERVER_ERROR,
             {
-              "text": error,
-              "username": this.screen_name
+              text: error + "\n" +  this.generatedTweet,
+              username: this.screen_name
             }).then( res => {
 
           }).catch(err => {
