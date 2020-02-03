@@ -50,14 +50,12 @@
 </template>
 <script>
 import Login from './Login'
-import LinkList from '../pages/LinkList'
 import UserProfile from '../UserProfile'
 
 export default {
   name: 'Navbar',
   components: {
     Login,
-    LinkList,
     UserProfile
   },
   data () {

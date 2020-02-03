@@ -4,9 +4,8 @@
     <h3 v-if="!isLogin" class="index__description">
       Aitter -ついじぇね- は、「あなたっぽい」ツイートを自動生成するサービスです。<br>ツイートすればするほどそれっぽくなります。
       </h3>
-      <p class="index__attention">初めてのツイート生成は時間が掛かります。
-        <br>また鍵アカウントはツイート生成できませんが、
-        <br>初回ツイート生成時のみ鍵を外して頂けたら、それ以降は鍵アカウントも使用可能です。
+      <p class="index__attention">TwitterやLineなどのアプリ内ブラウザではログインすることができません。。safariやchromeなどのブラウザをお使い下さい。
+        <br>また鍵アカウントの場合、初回ツイート生成時のみ鍵を外して頂けたら、それ以降は鍵アカウントでも使用可能です。
       </p>
       <!-- <maintenance></maintenance> -->
     <link-list
@@ -23,14 +22,14 @@
 import Login from '../common/Login'
 import LinkList from '../pages/LinkList'
 import IndexExplain from '../IndexExplain'
-import Maintenance from '../common/Maintenance'
+// import Maintenance from '../common/Maintenance'
 export default {
   name: 'Index',
   components: {
     'login': Login,
     'link-list': LinkList,
-    'index-explain': IndexExplain,
-    'maintenance': Maintenance
+    'index-explain': IndexExplain
+    // 'maintenance': Maintenance
   },
   computed: {
     isLogin () {

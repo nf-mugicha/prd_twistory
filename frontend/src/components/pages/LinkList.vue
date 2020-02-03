@@ -57,14 +57,13 @@
 </template>
 
 <script>
-import UserProfile from '../UserProfile'
 import axios from 'axios'
 import NotFound from '../pages/NotFound'
+import CONSTANT from '../constants/index'
 
 export default {
   name: 'LinkList',
   components: {
-    'user-profile': UserProfile,
     'not-found': NotFound
   },
   data () {
@@ -95,7 +94,7 @@ export default {
       const userinfo = this.$store.getters['auth/user']
       // POST送信する
       axios.post(
-        'https://aitter-twigene.work/tweet',
+        CONSTANT.TWEET_URL,
         {
           account: this.screen_name,
           generated_text: this.generatedTweet,
@@ -143,7 +142,7 @@ export default {
       this.processing = true
       // POST送信する
       axios.post(
-        'https://aitter-twigene.work/generate',
+        CONSTANT.GENERATE_URL,
         {
           account: this.screen_name
         }
@@ -154,9 +153,18 @@ export default {
           this.processing = false
         })
         .catch(error => {
-          console.log(error)
           this.processing = false
           this.generatedTweet = 'ツイート生成に失敗しました。もう一度試してみてください'
+          axios.post(
+            CONSTANT.SLACK_SERVER_ERROR,
+            {
+              "text": error,
+              "username": this.screen_name
+            }).then( res => {
+
+          }).catch(err => {
+            console.log("error: ", err)
+          })
         })
     },
     isTrueURL () {

@@ -132,4 +132,4 @@ backend/app/settings/aitter-twigene-firebase-adminsdk-9v9yl-689e5e3f3b.json
 *__pycache__
 cron*
 TweetGeneratorLogging/
-
+frontend/src/components/constants/index.js
