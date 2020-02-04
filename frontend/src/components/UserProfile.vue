@@ -1,13 +1,12 @@
 <template>
 <v-container class="align-center justify-center layout text-center">
 <v-card
-v-if="userinfo"
 class="prof mx-auto"
 width="100%"
 >
 <v-img
-v-if="userinfo.backgroundPhoto"
-:src="userinfo.backgroundPhoto"
+v-if="userdata.backgroundPhoto"
+:src="userdata.backgroundPhoto"
 height="100px"
 >
 </v-img>
@@ -17,29 +16,24 @@ height="100px"
 src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
 >
 </v-img>
-<router-link
-to="/"
->
-<v-card-title
-class="name align-end justify-center fill-height">
+<v-card-title class="name align-end justify-center fill-height">
     <v-avatar
 color="grey lighten-4"
 size="70px"
 >
 <img
-v-if="userinfo.photoURL"
-:src="userinfo.photoURL"
+v-if="userdata.photoURL"
+:src="userdata.photoURL"
 alt="profile"
 >
 </v-avatar>
-{{ userinfo.displayName }}
+            {{ userdata.displayName }}
 </v-card-title>
-</router-link>
         <ul class="icon">
-        <li class="twitter"><a :href="userinfo.twitterURL" target="_blank"><font-awesome-icon :icon="['fab', 'twitter']" /></a></li>
+        <li class="twitter"><a :href="userdata.twitterURL" target="_blank"><font-awesome-icon :icon="['fab', 'twitter']" /></a></li>
     </ul>
 <v-card-text>
-    {{ userinfo.description }}
+    {{ userdata.description }}
 </v-card-text>
 </v-card>
 </v-container>
@@ -48,9 +42,27 @@ alt="profile"
 <script>
 export default {
   name: 'UserProfile',
+  props: {
+    'user_profile': {
+      type: String,
+      required: true
+    }
+  },
+  mounted () {
+    this.userProfile()
+  },
+  methods: {
+    userProfile () {
+      console.log(this.user_profile)
+      this.$store.dispatch('user/userData', {screen_name: this.user_profile})
+    }
+  },
   computed: {
     userinfo () {
       return this.$store.getters['auth/user']
+    },
+    userdata () {
+      return this.$store.getters['user/userProfile']
     }
   }
 }
@@ -58,6 +70,10 @@ export default {
 
 <style>
 /* プロフィール */
+.prof {
+    /* padding-top: 20px;
+    padding-bottom: 20px; */
+}
 .prof .icatch{
     margin:0;
 }
