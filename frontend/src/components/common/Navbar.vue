@@ -29,6 +29,10 @@
         :src="userinfo.photoURL"
         alt="profile"
         >
+      <img
+        v-else
+        src="../../assets/twigene_logo.png"
+      >
     </v-avatar>
       </v-app-bar-nav-icon>
     </v-toolbar>

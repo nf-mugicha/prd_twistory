@@ -29,8 +29,9 @@ const actions = {
     async login(context) {
         // twitterログイン
         const provider = new firebase.auth.TwitterAuthProvider()
-        await firebase.auth().signInWithRedirect(provider)
-        firebase.auth().getRedirectResult()
+            // await firebase.auth().signInWithRedirect(provider)
+            // firebase.auth().getRedirectResult()
+        firebase.auth().signInWithPopup(provider)
             .then((userCredential) => {
                 // ユーザー情報を取り出す
                 const userInfo = userCredential.additionalUserInfo.profile
