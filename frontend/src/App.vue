@@ -5,8 +5,8 @@
       <!-- <AdSense></AdSense> -->
       <router-view></router-view>
     </v-content>
-    <FooterMenu />
     <Footer />
+    <FooterMenu />
   </v-app>
 </template>
 
