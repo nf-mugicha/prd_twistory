@@ -22,8 +22,8 @@ color="grey lighten-4"
 size="70px"
 >
 <img
-v-if="userdata.photoURL"
-:src="userdata.photoURL"
+v-if="user"
+:src="user.providerData[0].photoURL"
 alt="profile"
 >
 </v-avatar>
@@ -40,6 +40,7 @@ alt="profile"
 </template>
 
 <script>
+import firebase from 'firebase'
 export default {
   name: 'UserProfile',
   props: {
@@ -48,7 +49,36 @@ export default {
       required: true
     }
   },
-  mounted () {
+    data: function () {
+    return {
+      processing: false,
+      user: firebase.auth().currentUser,
+      userName: null,
+      userPic: null,
+      userEmail: null,
+      userEmailVerified: null,
+      userUid: null,
+      isSignedIn: null,
+      // ログイン/ ログアウト確認
+      isAuth: true
+    }
+  },
+  mounted: function () {
+    firebase.auth().onAuthStateChanged(
+      user => {
+        this.user = user || {}
+        this.isAuth = !!user
+        this.userName = user
+          ? this.user.displayName : null
+        this.userPic = user
+          ? this.user.photoURL : null
+        this.userEmail = user
+          ? this.user.email : null
+        this.userEmailVerified = user
+          ? this.user.emailVerified : null
+        this.userUid = user
+          ? this.user.uid : null
+      })
     this.userProfile()
   },
   methods: {

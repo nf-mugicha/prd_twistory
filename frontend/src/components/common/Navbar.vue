@@ -27,8 +27,8 @@
       color="grey lighten-4"
       >
       <img
-        v-if="userinfo.photoURL"
-        :src="userinfo.photoURL"
+        v-if="user"
+        :src="user.providerData[0].photoURL"
         alt="profile"
         >
     </v-avatar>
@@ -102,6 +102,7 @@ import Index from '../pages/Index'
 import UserProfile from '../UserProfile'
 import TermsOfService from '../pages/TermsOfService'
 import PrivacyPlicy from '../pages/PrivacyPolicy'
+import firebase from 'firebase'
 
 export default {
   name: 'Navbar',
@@ -116,8 +117,15 @@ export default {
         { name: 'Home', path: '/', component: Index },
         { name: 'プライバシーポリシー', path: '/privacy-policy', component: PrivacyPlicy },
         { name: '利用規約', path: '/service', component: TermsOfService }
-      ]
+      ],
+      user: firebase.auth().currentUser
     }
+  },
+  mounted: function () {
+    firebase.auth().onAuthStateChanged(
+      user => {
+        this.user = user || {}
+      })
   },
   // pathの:idを直接書き換えた時の対応
   beforeRouteUpdate (to, from, next) {

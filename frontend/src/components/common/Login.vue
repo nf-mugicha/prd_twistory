@@ -41,15 +41,6 @@ export default {
       isAuth: true
     }
   },
-  // computedには結果がキャッシュされる
-  computed: {
-    isLogin () {
-      return this.$store.getters['auth/check']
-    },
-    userinfo () {
-      return this.$store.getters['auth/user']
-    }
-  },
   mounted: function () {
     firebase.auth().onAuthStateChanged(
       user => {
@@ -84,6 +75,15 @@ export default {
     signOut: function () {
       this.$store.dispatch('auth/logout')
       this.$router.push('/')
+    }
+  },
+    // computedには結果がキャッシュされる
+  computed: {
+    isLogin () {
+      return this.$store.getters['auth/check']
+    },
+    userinfo () {
+      return this.$store.getters['auth/user']
     }
   }
 }
