@@ -25,14 +25,10 @@
       color="grey lighten-4"
       >
       <img
-        v-if="userinfo.photoURL"
-        :src="userinfo.photoURL"
+        v-if="user"
+        :src="user.providerData[0].photoURL"
         alt="profile"
         >
-      <img
-        v-else
-        src="../../assets/twigene_logo.png"
-      >
     </v-avatar>
       </v-app-bar-nav-icon>
     </v-toolbar>
@@ -65,8 +61,15 @@ export default {
   data () {
     return {
       screenName: this.userinfo ? this.userinfo.screenName : null,
-      drawer: null
+      drawer: null,
+      user: firebase.auth().currentUser
     }
+  },
+  mounted: function () {
+    firebase.auth().onAuthStateChanged(
+      user => {
+        this.user = user || {}
+      })
   },
   // pathの:idを直接書き換えた時の対応
   beforeRouteUpdate (to, from, next) {
