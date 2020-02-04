@@ -4,16 +4,14 @@
     <h3 v-if="!isLogin" class="index__description">
       Aitter -ついじぇね- は、「あなたっぽい」ツイートを自動生成するサービスです。<br>ツイートすればするほどそれっぽくなります。
       </h3>
-      <p class="index__attention">TwitterやLineなどのアプリ内ブラウザではログインすることができません。。safariやchromeなどのブラウザをお使い下さい。
-        <br>また鍵アカウントの場合、初回ツイート生成時のみ鍵を外して頂けたら、それ以降は鍵アカウントでも使用可能です。
+      <p class="index__attention">
+        鍵アカウントの場合は、初回ツイート生成時のみ鍵を外して頂けたら、それ以降は鍵アカウントでも使用可能です。
       </p>
       <!-- <maintenance></maintenance> -->
     <link-list
     v-if="isLogin"
-    :screen_name="userinfo.screenName"
-    >
-    </link-list>
-      <login v-else />
+    :screen_name="userinfo.screenName" />
+        <login v-else />
       <index-explain v-if="!isLogin" />
   </div>
 </template>

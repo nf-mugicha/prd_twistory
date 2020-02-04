@@ -24,20 +24,25 @@ import firebase from 'firebase'
 
 export default {
   name: 'Login',
-  components: {
-  },
   data: function () {
     return {
       processing: false,
-      user: firebase.auth().currentUser,
-      userName: null,
-      userPic: null,
-      userEmail: null,
-      userEmailVerified: null,
-      userUid: null,
-      isSignedIn: null,
-      // ログイン/ ログアウト確認
-      isAuth: true
+    }
+  },
+  methods: {
+    signIn: function () {
+      try {
+        this.processing = true
+        this.$store.dispatch('auth/login')
+      } catch (e) {
+        this.processing = false
+      } finally {
+        this.processing = false
+      }
+    },
+    signOut: function () {
+      this.$store.dispatch('auth/logout')
+      this.$router.push('/')
     }
   },
   // computedには結果がキャッシュされる
@@ -49,41 +54,5 @@ export default {
       return this.$store.getters['auth/user']
     }
   },
-  mounted: function () {
-    firebase.auth().onAuthStateChanged(
-      user => {
-        this.user = user || {}
-        this.isAuth = !!user
-        this.userName = user
-          ? this.user.displayName : null
-        this.userPic = user
-          ? this.user.photoURL : null
-        this.userEmail = user
-          ? this.user.email : null
-        this.userEmailVerified = user
-          ? this.user.emailVerified : null
-        this.userUid = user
-          ? this.user.uid : null
-      })
-  },
-  methods: {
-    signIn: function () {
-      if (this.processing) return
-      try {
-        this.processing = true
-        this.$store.dispatch('auth/login')
-        setTimeout(() => {
-          this.processing = false
-        }, 10000)
-        // this.processing = false
-      } catch (e) {
-        this.processing = false
-      }
-    },
-    signOut: function () {
-      this.$store.dispatch('auth/logout')
-      this.$router.push('/')
-    }
-  }
 }
 </script>

@@ -122,11 +122,7 @@ export default {
           this.processing = false
           // alert('ツイートに失敗しました。投稿画面を開きます')
           const tweetPage = this.createTweetUrl()
-          if (!window.open(tweetPage)) {
-            window.location.href = tweetPage
-          } else {
-            window.open(tweetPage)
-          }
+          window.location.href = tweetPage
         })
     },
     createTweetUrl () {
@@ -158,7 +154,7 @@ export default {
           axios.post(
             CONSTANT.SLACK_SERVER_ERROR,
             {
-              text: error + "\n" +  this.generatedTweet,
+              text: this.generatedTweet + "\n" + error,
               username: this.screen_name
             }).then( res => {
 
