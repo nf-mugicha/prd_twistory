@@ -24,7 +24,7 @@
          <v-list-item-avatar color="grey darken-3">
          <v-img
          class="elevation-6"
-         :src="userinfo.photoURL"
+         :src="user.providerData[0].photoURL"
          ></v-img>
          </v-list-item-avatar>
          <v-row
@@ -60,6 +60,7 @@
 import axios from 'axios'
 import NotFound from '../pages/NotFound'
 import CONSTANT from '../constants/index'
+import firebase from 'firebase'
 
 export default {
   name: 'LinkList',
@@ -72,8 +73,15 @@ export default {
       NotFound: false,
       processing: false,
       tweetUrl: '',
-      tweetText: ''
+      tweetText: '',
+      user: firebase.auth().currentUser
     }
+  },
+  mounted: function () {
+    firebase.auth().onAuthStateChanged(
+      user => {
+        this.user = user || {}
+      })
   },
   props: {
     screen_name: {
