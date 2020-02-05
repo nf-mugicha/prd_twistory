@@ -33,7 +33,7 @@
          >
          <v-btn
          class="light-blue darken-1 text-center white--text"
-         @click.prevent="PostingTweet"
+         @click.prevent="TweetPost"
          :disabled="processing"
          :loading="processing"
          >
@@ -132,6 +132,17 @@ export default {
           const tweetPage = this.createTweetUrl()
           window.location.href = tweetPage
         })
+    },
+    TweetPost (btn) {
+      if (this.processing) return
+      this.processing = true
+      const userinfo = this.$store.getters['auth/user']
+      const tweetPage = this.createTweetUrl()
+      if (!window.open(tweetPage)) {
+        window.location.href = tweetPage
+      } else {
+        window.open(tweetPage)
+      }
     },
     createTweetUrl () {
       // Twitter用のurl作成
