@@ -23,7 +23,7 @@
     "ajv": "^6.10.2",
     "ajv-keywords": "^2.1.1",
     "bootstrap-vue": "^2.0.0-rc.28",
-    "jquery": "^1.9.1",
+    "jquery": "^3.5.0",
     "vue": "^2.5.2",
     "vue-hot-reload-api": "^2.3.4",
     "vue-router": "^3.0.1",
